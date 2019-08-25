@@ -38,21 +38,17 @@ export const handleRuleEdit = ruleId => dispatch => {
   });
 };
 
-export const handleRuleSubmitCreate = newRule => dispatch => {
-  axios({
-    method: 'post',
-    url: `${API_CONN}/rules`,
-    data: newRule
-  })
-    .then(response => {
-      dispatch({
-        type: RULE_SUBMIT_CREATE,
-        payload: response.data
-      });
-    })
-    .catch(error => {
-      console.log(error);
+export const handleRuleSubmitCreate = newRule => async dispatch => {
+  try {
+    const response = await axios.post(`${API_CONN}/rules`, newRule);
+    const savedRule = await axios.get(`${API_CONN}${response.headers.location}`);
+    dispatch({
+      type: RULE_SUBMIT_CREATE,
+      payload: savedRule.data
     });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const handleRuleSubmitUpdate = editedRule => dispatch => {
@@ -72,22 +68,19 @@ export const handleRuleSubmitUpdate = editedRule => dispatch => {
       console.log(error);
     });
 };
-export const handleRulesDelete = ruleIds => dispatch => {
-  axios({
-    method: 'post',
-    url: `${API_CONN}/rules/remove`,
-    data: ruleIds
-  })
-    .then(response => {
-      console.log(response);
+
+export const handleRulesDelete = ruleIds => async dispatch => {
+  try {
+    const res = await axios.post(`${API_CONN}/rules/delete`, { ids: ruleIds });
+    if (res.status >= 200 && res.status < 300) {
       dispatch({
         type: RULES_DELETE,
         payload: ruleIds
       });
-    })
-    .catch(error => {
-      console.log(error);
-    });
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const toggleModal = () => {

@@ -7,7 +7,6 @@ import RuleFormBodyCardPayments from './RuleFormBodyCardPayments';
 
 class RuleFormBodyCommon extends React.Component {
   render() {
-    console.log(this.props);
     const amountChoiceComponent = this.createAmountChoice(this.props.compare || TransactionValueOperators.LESS_THAN.id);
     const activeCategories =
       this.props.direction === 'INCOMING' ? IncomingTransactionCategories : OutgoingTransactionCategories;

@@ -17,6 +17,7 @@ public class RuleEndpointConfig {
         return RouterFunctions
                 .route(GET("/rules").and(accept(APPLICATION_JSON)), ruleHandler::findAll)
                 .andRoute(GET("/rules/{id}").and(accept(APPLICATION_JSON)), ruleHandler::findById)
-                .andRoute(POST("/rules").and(contentType(APPLICATION_JSON)), ruleHandler::create);
+                .andRoute(POST("/rules").and(contentType(APPLICATION_JSON)), ruleHandler::create)
+                .andRoute(POST("/rules/delete").and(contentType(APPLICATION_JSON)), ruleHandler::delete);
     }
 }

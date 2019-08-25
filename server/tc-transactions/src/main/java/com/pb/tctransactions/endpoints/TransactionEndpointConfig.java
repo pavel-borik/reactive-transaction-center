@@ -23,18 +23,4 @@ public class TransactionEndpointConfig {
                 .andRoute(GET("/transactions/{id}"), transactionHandler::findById)
                 .andRoute(POST("/transactions"), transactionHandler::create);
     }
-
-    @Bean
-    CorsWebFilter corsWebFilter() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-
-        return new CorsWebFilter(source);
-    }
 }

@@ -1,14 +1,13 @@
 package com.pb.tctransactions.handlers;
 
 import com.pb.tctransactions.dto.RuleDto;
-import com.pb.tctransactions.model.transactions.Transaction;
+import com.pb.tctransactions.dto.RulesToDeleteDto;
 import com.pb.tctransactions.services.RuleService;
 import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.reactive.function.BodyExtractor;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
@@ -33,6 +32,15 @@ public class RuleHandler {
         Flux<RuleDto> flux = r.bodyToFlux(RuleDto.class)
                 .flatMap(this.ruleService::create);
         return defaultWriteResponse(flux);
+    }
+
+    public Mono<ServerResponse> delete(ServerRequest r) {
+        return r.bodyToMono(RulesToDeleteDto.class)
+                .flatMap(strings -> {
+                    ruleService.delete(strings).subscribe();
+                    return ServerResponse.ok().build();
+                })
+                .onErrorResume(e -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
     private Mono<ServerResponse> defaultWriteResponse(Publisher<RuleDto> rules) {

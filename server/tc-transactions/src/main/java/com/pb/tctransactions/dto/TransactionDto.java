@@ -3,14 +3,12 @@ package com.pb.tctransactions.dto;
 import com.pb.tctransactions.model.enums.TransactionDirection;
 import com.pb.tctransactions.model.enums.TransactionType;
 import com.pb.tctransactions.model.transactions.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class TransactionDto {
 
