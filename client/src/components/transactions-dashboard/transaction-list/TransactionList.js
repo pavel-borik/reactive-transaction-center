@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import TransactionFilterContainer from '../../../containers/transactions/TransactionFilterContainer';
-import TransactionItem from '../transaction-item/TransactionItem';
 import Pagination from 'react-js-pagination';
 import { withStyles, Grid } from '@material-ui/core';
 import { Spinner } from 'reactstrap';
+import TransactionFilterContainer from '../../../containers/transactions/TransactionFilterContainer';
+import TransactionItem from '../transaction-item/TransactionItem';
 
 class TransactionsList extends Component {
   constructor(props) {

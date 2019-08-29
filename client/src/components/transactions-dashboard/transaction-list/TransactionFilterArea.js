@@ -18,7 +18,7 @@ const TransactionFilterArea = props => {
 
   return (
     <Fragment>
-      <Grid container spacing={16}>
+      <Grid container spacing={4}>
         <Grid item md={6} xs={12}>
           <FilterSelect
             label={FILTER_TIME_PERIOD.text}

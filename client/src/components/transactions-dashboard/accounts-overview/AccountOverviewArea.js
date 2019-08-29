@@ -1,6 +1,6 @@
 import React from 'react';
-import AccountBalanceInfo from './AccountBalanceInfo';
 import { Grid } from '@material-ui/core';
+import AccountBalanceInfo from './AccountBalanceInfo';
 
 const dummyData = [
   { accountNumber: '873113211/2010', accountOwner: 'Legolas', accountPreferredColor: 'orange', balance: 5000 },
@@ -19,7 +19,7 @@ const AccountOverviewArea = props => {
   return (
     <div>
       <h2>Accounts</h2>
-      <Grid container direction="row" spacing={24}>
+      <Grid container direction="row" spacing={4}>
         {accounts.map((account, i) => {
           return (
             <Grid item key={i}>

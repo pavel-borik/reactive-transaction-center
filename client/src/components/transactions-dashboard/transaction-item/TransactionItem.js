@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow } from '@material-ui/core/';
-import { Button, Form, FormGroup, Col, Row, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Col, Row, Input, Badge } from 'reactstrap';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {
   OutgoingTransactionCategories,
   TransactionCategories,
   IncomingTransactionCategories,
   SpecialCategories
 } from '../../../constants/categories';
-import { Badge } from 'reactstrap';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
 import { TransactionTypes, TransactionDirections } from '../../../constants/transactions';
 import TransactionItemCategorySplitForm from './TransactionItemCategorySplitForm';
@@ -25,12 +24,12 @@ class TransactionItem extends Component {
   componentDidMount() {
     const { categoryId } = this.props;
     if (categoryId !== SpecialCategories.UNCATEGORIZED.id) {
-      this.setState({ categoryId: categoryId });
+      this.setState({ categoryId });
     }
   }
 
   handleCategoryChange = event => {
-    this.setState({ categoryId: parseInt(event.target.value) });
+    this.setState({ categoryId: parseInt(event.target.value, 10) });
   };
 
   handleTransactionCategoryUpdate = event => {
@@ -47,12 +46,10 @@ class TransactionItem extends Component {
         );
         if (categorizedChild !== undefined && categorizedChild.amount === transactionValue) {
           return Object.values(TransactionCategories).find(cat => cat.id === categorizedChild.categoryId);
-        } else {
-          return TransactionCategories.SPLIT;
         }
-      } else {
         return TransactionCategories.SPLIT;
       }
+      return TransactionCategories.SPLIT;
     }
     return Object.values(TransactionCategories).find(cat => cat.id === transactionCategoryId);
   };
@@ -62,83 +59,92 @@ class TransactionItem extends Component {
       classes,
       index,
       id,
-      accountPreferredColor,
+      categoryId,
       direction,
+      accountPreferredColor,
       partyDescription,
-      transactionPartyAccountPrefix,
-      transactionPartyAccountAccountNumber,
-      transactionPartyAccountBankCode,
-      transactionAdditionalInfoDomesticConstantSymbol,
-      transactionAdditionalInfoDomesticVariableSymbol,
+      partyAccount,
+      additionalInfoDomestic,
+      additionalInfoForeign,
+      additionalInfoCard,
       payeeMessage,
       payerMessage,
-      transactionAdditionalInfoCardMerchantName,
-      transactionValueAmount,
-      transactionValueCurrency,
+      value,
       valueDate,
-      transactionType,
-      categoryId,
-      parentId,
-      originalValue,
-      childTransactionsList
+      transactionType
     } = this.props;
 
-    const isParentTransaction = childTransactionsList !== null && childTransactionsList.length > 0 && parentId === null;
-    const isSplitableTransaction = childTransactionsList !== null && parentId === null;
-    const valueAmount = isParentTransaction ? originalValue : transactionValueAmount;
+    // const isParentTransaction = childTransactionsList !== null && childTransactionsList.length > 0 && parentId === null;
+    // const isSplitableTransaction = childTransactionsList !== null && parentId === null;
+    // const valueAmount = isParentTransaction ? originalValue : transactionValueAmount;
 
-    let maxValueToAssign = 0;
-    if (isSplitableTransaction) {
-      const uncategorizedChild = childTransactionsList.find(
-        it => it.categoryId === TransactionCategories.UNCATEGORIZED.id
-      );
-      if (uncategorizedChild !== undefined) {
-        maxValueToAssign = uncategorizedChild.amount;
-      } else {
-        maxValueToAssign = valueAmount;
-      }
-    }
+    // let maxValueToAssign = 0;
+    // if (isSplitableTransaction) {
+    //   const uncategorizedChild = childTransactionsList.find(
+    //     it => it.categoryId === TransactionCategories.UNCATEGORIZED.id
+    //   );
+    //   if (uncategorizedChild !== undefined) {
+    //     maxValueToAssign = uncategorizedChild.amount;
+    //   } else {
+    //     maxValueToAssign = valueAmount;
+    //   }
+    // }
 
-    let isSplitOffered = false;
-    if (isParentTransaction) {
-      isSplitOffered = maxValueToAssign > 0;
-    } else {
-      isSplitOffered = categoryId === TransactionCategories.UNCATEGORIZED.id;
-    }
+    // let isSplitOffered = false;
+    // if (isParentTransaction) {
+    //   isSplitOffered = maxValueToAssign > 0;
+    // } else {
+    //   isSplitOffered = categoryId === TransactionCategories.UNCATEGORIZED.id;
+    // }
 
-    const invalidForNewCategorySubmit =
-      this.state.categoryId === UNSELECTED ||
-      categoryId === this.state.categoryId ||
-      transactionType === TransactionTypes.CASH.id ||
-      isParentTransaction;
+    // const invalidForNewCategorySubmit =
+    //   this.state.categoryId === UNSELECTED ||
+    //   categoryId === this.state.categoryId ||
+    //   transactionType === TransactionTypes.CASH.id ||
+    //   isParentTransaction;
 
-    const categoryEnum = this.getCategoryEnum(isParentTransaction, childTransactionsList, categoryId, valueAmount);
+    // const categoryEnum = this.getCategoryEnum(isParentTransaction, childTransactionsList, categoryId, valueAmount);
+    // const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
+    // const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
+    // const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
+    // const transactionCategories =
+    //   direction === TransactionDirections.INCOMING.id ? IncomingTransactionCategories : OutgoingTransactionCategories;
+    // const detailCardPayments = { 'Merchant name': transactionAdditionalInfoCardMerchantName };
+    // const detailTransfers = {
+    //   'Party account': `${transactionPartyAccountPrefix}-${transactionPartyAccountAccountNumber}/${transactionPartyAccountBankCode}`,
+    //   'Variable symbol': transactionAdditionalInfoDomesticVariableSymbol,
+    //   'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol,
+    //   Message: `${direction === TransactionDirections.INCOMING.id ? payeeMessage : payerMessage}`
+    // };
+    // let activeDetail;
+    // switch (transactionType) {
+    //   case TransactionTypes.CARD.id:
+    //     activeDetail = detailCardPayments;
+    //     break;
+    //   case TransactionTypes.CASH.id:
+    //     activeDetail = null;
+    //     break;
+    //   default:
+    //     activeDetail = detailTransfers;
+    // }
+
+    const categoryEnum = Object.values(TransactionCategories).find(cat => cat.id === categoryId);
     const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
+
     const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
+
     const transactionCategories =
       direction === TransactionDirections.INCOMING.id ? IncomingTransactionCategories : OutgoingTransactionCategories;
-    const detailCardPayments = { 'Merchant name': transactionAdditionalInfoCardMerchantName };
-    const detailTransfers = {
-      'Party account': `${transactionPartyAccountPrefix}-${transactionPartyAccountAccountNumber}/${transactionPartyAccountBankCode}`,
-      'Variable symbol': transactionAdditionalInfoDomesticVariableSymbol,
-      'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol,
-      Message: `${direction === TransactionDirections.INCOMING.id ? payeeMessage : payerMessage}`
-    };
-    let activeDetail;
-    switch (transactionType) {
-      case TransactionTypes.CARD.id:
-        activeDetail = detailCardPayments;
-        break;
-      case TransactionTypes.CASH.id:
-        activeDetail = null;
-        break;
-      default:
-        activeDetail = detailTransfers;
-    }
 
+    const invalidForNewCategorySubmit = false;
+    const isSplitOffered = false;
+    const maxValueToAssign = 100;
+    const valueAmount = value.amount;
+    const valueCurrency = value.currency;
+    const activeDetail = null;
     return (
-      <Grow in={true} timeout={500 + 100 * index}>
+      <Grow in timeout={500 + 100 * index}>
         <ExpansionPanel className="mb-2">
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -174,7 +180,7 @@ class TransactionItem extends Component {
                                   onClick={e => {
                                     e.stopPropagation();
                                   }}
-                                  disabled={isParentTransaction}
+                                  disabled={false}
                                   value={this.state.categoryId}
                                   bsSize="sm"
                                   style={{ width: 220 }}
@@ -223,7 +229,7 @@ class TransactionItem extends Component {
                         &#8722;&nbsp;
                         {valueAmount.toLocaleString('cs-cz', {
                           style: 'currency',
-                          currency: transactionValueCurrency || 'CZK'
+                          currency: valueCurrency || 'CZK'
                         })}
                       </Typography>
                     )}
@@ -231,7 +237,7 @@ class TransactionItem extends Component {
                       <Typography className={classes.amountPositive}>
                         {valueAmount.toLocaleString('cs-cz', {
                           style: 'currency',
-                          currency: transactionValueCurrency || 'CZK'
+                          currency: valueCurrency || 'CZK'
                         })}
                       </Typography>
                     )}
@@ -243,7 +249,7 @@ class TransactionItem extends Component {
           <TransactionItemPanelDetail
             detail={activeDetail}
             accountPreferredColor={accountPreferredColor}
-            childTransactionsList={childTransactionsList}
+            // childTransactionsList={childTransactionsList}
             handleTransactionUnsplit={this.props.handleTransactionUnsplit}
             transactionId={id}
           />
