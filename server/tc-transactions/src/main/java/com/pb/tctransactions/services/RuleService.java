@@ -1,7 +1,5 @@
 package com.pb.tctransactions.services;
 
-import com.pb.tctransactions.configuration.ModelMapperConfiguration;
-import com.pb.tctransactions.dto.RuleDto;
 import com.pb.tctransactions.dto.RulesToDeleteDto;
 import com.pb.tctransactions.model.rules.Rule;
 import com.pb.tctransactions.model.rules.conditions.*;
@@ -15,7 +13,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Log4j2
@@ -23,33 +20,22 @@ import java.util.List;
 @AllArgsConstructor
 public class RuleService {
     private final RuleRepository ruleRepository;
-    private final ModelMapperConfiguration modelMapperConfiguration;
 
-    public Flux<RuleDto> findAll() {
-        return this.ruleRepository.findAll()
-                .map(rule -> modelMapperConfiguration
-                        .getModelMapper()
-                        .map(rule, RuleDto.class));
+    public Flux<Rule> findAll() {
+        return this.ruleRepository.findAll();
     }
 
-    public Mono<RuleDto> findById(String id) {
-        Mono<Rule> rule = this.ruleRepository.findById(id);
-        return rule.map(r -> modelMapperConfiguration.getModelMapper().map(r, RuleDto.class));
+    public Mono<Rule> findById(String id) {
+        return this.ruleRepository.findById(id);
     }
 
-    public Mono<RuleDto> update(String id, RuleDto ruleDto) {
-        Rule newRule = modelMapperConfiguration.getModelMapper().map(ruleDto, Rule.class);
-        newRule.setLastEditTimestamp(new Date());
-        newRule.setId(id);
-        Mono<Rule> save = this.ruleRepository.save(newRule);
-        return save.map(rule -> modelMapperConfiguration.getModelMapper().map(rule, RuleDto.class));
+    public Mono<Rule> update(String id, Rule rule) {
+        rule.setId(id);
+        return this.ruleRepository.save(rule);
     }
 
-    public Mono<RuleDto> create(RuleDto ruleDto) {
-        Rule newRule = modelMapperConfiguration.getModelMapper().map(ruleDto, Rule.class);
-        newRule.setLastEditTimestamp(new Date());
-        Mono<Rule> save = this.ruleRepository.save(newRule);
-        return save.map(rule -> modelMapperConfiguration.getModelMapper().map(rule, RuleDto.class));
+    public Mono<Rule> create(Rule rule) {
+        return this.ruleRepository.save(rule);
     }
 
     public Flux<Rule> delete(RulesToDeleteDto rulesToDeleteDto) {
@@ -57,37 +43,37 @@ public class RuleService {
         return this.ruleRepository.deleteByIdIn(rulesToDeleteDto.getIds());
     }
 
-    private List<RuleCondition> createConditions(RuleDto ruleDto) {
+    private List<RuleCondition> createConditions(Rule rule) {
         List<RuleCondition> conditions = new ArrayList<>();
-        conditions.add(new CategoryCondition(ruleDto.getCategoryId(), 0.5));
-        if (StringUtils.isNotBlank(ruleDto.getDirection())) {
-            conditions.add(new DirectionCondition(ruleDto.getDirection(), 0.5));
+        conditions.add(new CategoryCondition(rule.getCategoryId(), 0.5));
+        if (StringUtils.isNotBlank(rule.getDirection())) {
+            conditions.add(new DirectionCondition(rule.getDirection(), 0.5));
         }
-        if (StringUtils.isNotBlank(ruleDto.getTransactionType())) {
-            conditions.add(new TransactionTypeCondition(ruleDto.getTransactionType(), 0.5));
+        if (StringUtils.isNotBlank(rule.getTransactionType())) {
+            conditions.add(new TransactionTypeCondition(rule.getTransactionType(), 0.5));
         }
-        if (StringUtils.isNotBlank(ruleDto.getPartyName())) {
-            conditions.add(new PartyNameCondition(ruleDto.getPartyName(), 0.5));
+        if (StringUtils.isNotBlank(rule.getPartyName())) {
+            conditions.add(new PartyNameCondition(rule.getPartyName(), 0.5));
         }
-        if (StringUtils.isNotBlank(ruleDto.getPartyBankCode())) {
+        if (StringUtils.isNotBlank(rule.getPartyBankCode())) {
             conditions.add(new PartyAccountCondition(
                     new TransactionPartyAccount(
-                            ruleDto.getPartyAccountPrefix(),
-                            ruleDto.getPartyAccountNumber(),
-                            ruleDto.getPartyBankCode()),
+                            rule.getPartyAccountPrefix(),
+                            rule.getPartyAccountNumber(),
+                            rule.getPartyBankCode()),
                     0.5));
         }
-        if (StringUtils.isNotBlank(ruleDto.getConstantSymbol())) {
-            conditions.add(new ConstantSymbolCondition(ruleDto.getConstantSymbol(), 0.5));
+        if (StringUtils.isNotBlank(rule.getConstantSymbol())) {
+            conditions.add(new ConstantSymbolCondition(rule.getConstantSymbol(), 0.5));
         }
-        if (StringUtils.isNotBlank(ruleDto.getVariableSymbol())) {
-            conditions.add(new VariableSymbolCondition(ruleDto.getConstantSymbol(), 0.5));
+        if (StringUtils.isNotBlank(rule.getVariableSymbol())) {
+            conditions.add(new VariableSymbolCondition(rule.getConstantSymbol(), 0.5));
         }
-        if (StringUtils.isNotBlank(ruleDto.getSpecificSymbol())) {
-            conditions.add(new SpecificSymbolCondition(ruleDto.getConstantSymbol(), 0.5));
+        if (StringUtils.isNotBlank(rule.getSpecificSymbol())) {
+            conditions.add(new SpecificSymbolCondition(rule.getConstantSymbol(), 0.5));
         }
-        if (StringUtils.isNotBlank(ruleDto.getPayerMessage())) {
-            conditions.add(new PayerMessageCondition(ruleDto.getPayerMessage(), 0.5));
+        if (StringUtils.isNotBlank(rule.getPayerMessage())) {
+            conditions.add(new PayerMessageCondition(rule.getPayerMessage(), 0.5));
         }
 
         return conditions;

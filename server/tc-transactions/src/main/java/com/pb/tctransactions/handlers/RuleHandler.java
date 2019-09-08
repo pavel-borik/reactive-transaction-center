@@ -1,7 +1,7 @@
 package com.pb.tctransactions.handlers;
 
-import com.pb.tctransactions.dto.RuleDto;
 import com.pb.tctransactions.dto.RulesToDeleteDto;
+import com.pb.tctransactions.model.rules.Rule;
 import com.pb.tctransactions.services.RuleService;
 import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
@@ -29,7 +29,7 @@ public class RuleHandler {
     }
 
     public Mono<ServerResponse> create(ServerRequest r) {
-        Flux<RuleDto> flux = r.bodyToFlux(RuleDto.class)
+        Flux<Rule> flux = r.bodyToFlux(Rule.class)
                 .flatMap(this.ruleService::create);
         return defaultWriteResponse(flux);
     }
@@ -43,7 +43,7 @@ public class RuleHandler {
                 .onErrorResume(e -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
-    private Mono<ServerResponse> defaultWriteResponse(Publisher<RuleDto> rules) {
+    private Mono<ServerResponse> defaultWriteResponse(Publisher<Rule> rules) {
         return Mono
                 .from(rules)
                 .flatMap(p -> ServerResponse
@@ -52,10 +52,10 @@ public class RuleHandler {
                         .build()
                 );
     }
-    private Mono<ServerResponse> defaultReadResponse(Publisher<RuleDto> rules) {
+    private Mono<ServerResponse> defaultReadResponse(Publisher<Rule> rules) {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(rules, RuleDto.class);
+                .body(rules, Rule.class);
     }
 }

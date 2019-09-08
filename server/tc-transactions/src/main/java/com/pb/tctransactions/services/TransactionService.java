@@ -1,7 +1,5 @@
 package com.pb.tctransactions.services;
 
-import com.pb.tctransactions.configuration.ModelMapperConfiguration;
-import com.pb.tctransactions.dto.TransactionDto;
 import com.pb.tctransactions.model.transactions.Transaction;
 import com.pb.tctransactions.repositories.TransactionRepository;
 import lombok.AllArgsConstructor;
@@ -16,18 +14,9 @@ import reactor.core.publisher.Mono;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
-    private final ModelMapperConfiguration modelMapperConfiguration;
 
-    public Flux<TransactionDto> findAll() {
-//        Rule r = new Rule();
-//        PartyNameCondition ruleCondition = new PartyNameCondition(ConditionType.PARTY_NAME, 1, "bla");
-//        System.out.println(ruleCondition.test("bla"));
-//        r.getConditions().add(ruleCondition);
-
-        return this.transactionRepository.findAll()
-                .map(transaction -> modelMapperConfiguration
-                        .getModelMapper()
-                        .map(transaction, TransactionDto.class));
+    public Flux<Transaction> findAll() {
+        return this.transactionRepository.findAll();
     }
 
     public Mono<Transaction> findById(String id) {

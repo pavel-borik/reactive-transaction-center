@@ -1,6 +1,5 @@
 package com.pb.tctransactions.handlers;
 
-import com.pb.tctransactions.dto.TransactionDto;
 import com.pb.tctransactions.model.transactions.Transaction;
 import com.pb.tctransactions.services.TransactionService;
 import lombok.AllArgsConstructor;
@@ -36,11 +35,11 @@ public class TransactionHandler {
         return defaultWriteResponse(flux);
     }
 
-    private Mono<ServerResponse> defaultReadResponse(Publisher<TransactionDto> transactions) {
+    private Mono<ServerResponse> defaultReadResponse(Publisher<Transaction> transactions) {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(transactions, TransactionDto.class);
+                .body(transactions, Transaction.class);
     }
 
     private Mono<ServerResponse> defaultWriteResponse(Publisher<Transaction> transactions) {
