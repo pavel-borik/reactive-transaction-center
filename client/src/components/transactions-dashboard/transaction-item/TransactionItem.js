@@ -29,7 +29,7 @@ class TransactionItem extends Component {
   }
 
   handleCategoryChange = event => {
-    this.setState({ categoryId: parseInt(event.target.value, 10) });
+    this.setState({ categoryId: event.target.value });
   };
 
   handleTransactionCategoryUpdate = event => {

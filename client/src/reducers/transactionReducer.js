@@ -1,6 +1,7 @@
+import moment from 'moment';
 import {
   GET_TRANSACTIONS,
-  TRANSACTIONS_LOADING,
+  DATA_LOADING,
   SET_FILTER,
   UPDATE_TRANSACTION_CATEGORY,
   SPLIT_TRANSACTION,
@@ -12,7 +13,6 @@ import {
   TimePeriodFilters,
   DirectionFilters
 } from '../constants/transactionListFilters';
-import moment from 'moment';
 
 const initialState = {
   transactions: [],
@@ -24,20 +24,16 @@ const initialState = {
   loading: false
 };
 
-const colors = ['red', 'green', 'orange', 'blue'];
-
-export default function(state = initialState, action) {
+export default (state = initialState, action) => {
   switch (action.type) {
     case GET_TRANSACTIONS: {
       return {
         ...state,
-        transactions: action.payload.data
-          .map(t => Object.assign({}, t, { accountPreferredColor: colors[Math.floor(Math.random() * colors.length)] }))
-          .sort((t1, t2) => moment(t2.valueDate).diff(t1.valueDate)),
+        transactions: action.payload.data.sort((t1, t2) => moment(t2.valueDate).diff(t1.valueDate)),
         loading: false
       };
     }
-    case TRANSACTIONS_LOADING: {
+    case DATA_LOADING: {
       return {
         ...state,
         loading: true
@@ -84,7 +80,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         transactions: state.transactions.map(t => {
-          if (t.id == action.payload.parentTransactionId) {
+          if (t.id === action.payload.parentTransactionId) {
             return {
               ...t,
               childTransactionsList: action.payload.data.childTransactionsList,
@@ -99,4 +95,4 @@ export default function(state = initialState, action) {
     default:
       return state;
   }
-}
+};

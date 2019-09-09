@@ -15,7 +15,7 @@ const AccountOverviewArea = props => {
     accountPreferredColor: 'red',
     balance: props.balance || 0
   };
-  const accounts = [realAccount, ...dummyData];
+  const accounts = props.bankAccounts;
   return (
     <div>
       <h2>Accounts</h2>

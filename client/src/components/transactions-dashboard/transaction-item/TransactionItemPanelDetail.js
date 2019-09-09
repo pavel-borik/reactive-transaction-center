@@ -27,7 +27,7 @@ class TransactionItemPanelDetail extends Component {
                 .map((childTransaction, i) => {
                   const categoryId = childTransaction.categoryId;
                   const amount = childTransaction.amount;
-                  const category = Object.values(TransactionCategories).find(c => c.id === parseInt(categoryId));
+                  const category = Object.values(TransactionCategories).find(c => c.id === categoryId);
                   const categoryText = category === undefined || category === null ? 'Unknown category' : category.text;
                   const isUncategorized = categoryId == TransactionCategories.UNCATEGORIZED.id;
                   return (

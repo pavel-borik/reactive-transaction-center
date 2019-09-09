@@ -1,22 +1,23 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, CardContent, Typography, Grow } from '@material-ui/core';
+import { Card, CardContent, Typography } from '@material-ui/core';
 
 const AccountBalanceInfo = props => {
   const { classes, accountInfo } = props;
-  const { accountNumber, accountOwner, accountPreferredColor } = accountInfo;
+  const { prefix, accountNumber, bankCode, user, color } = accountInfo;
   const balance = accountInfo.balance || 0;
+  const account = `${prefix}${prefix ? '-' : ''}${accountNumber}/${bankCode}`;
   return (
     <div>
-      <Card className={classes.card} style={{ borderLeft: `6px solid ${accountPreferredColor}` }}>
+      <Card className={classes.card} style={{ borderLeft: `6px solid ${color}` }}>
         <CardContent>
           <Typography className={classes.title} color="textSecondary" gutterBottom>
             Account info:
           </Typography>
           <Typography className={classes.pos} component="p">
-            {accountNumber}
+            {account}
             <br />
-            {accountOwner}
+            {user}
           </Typography>
           <Typography className={classes.title} color="textSecondary" gutterBottom>
             Account balance:

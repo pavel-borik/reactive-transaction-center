@@ -38,7 +38,7 @@ class TransactionItemCategorySplitForm extends Component {
     this.props.handleTransactionSplit({
       id: this.props.transactionId,
       amount: this.state.dropdownAmount,
-      categoryId: parseInt(this.state.dropdownCategoryId)
+      categoryId: this.state.dropdownCategoryId
     });
     this.setState({ dropdownAmount: '', dropdownCategoryId: UNSELECTED });
   };

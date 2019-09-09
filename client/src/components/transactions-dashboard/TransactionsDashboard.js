@@ -1,13 +1,14 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import TransactionListContainer from '../../containers/transactions/TransactionListContainer';
 import AccountsContainer from '../../containers/transactions/AccountsContainer';
+import BankAccountContainer from '../../containers/bankAccounts/BankAccountContainer';
 
 const TransactionsDashboard = () => {
   return (
-    <Fragment>
-      <AccountsContainer />
+    <>
+      <BankAccountContainer />
       <TransactionListContainer />
-    </Fragment>
+    </>
   );
 };
 

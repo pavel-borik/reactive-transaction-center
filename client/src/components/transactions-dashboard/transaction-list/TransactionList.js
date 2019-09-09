@@ -16,7 +16,7 @@ class TransactionsList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.transactions.length != prevProps.transactions.length) {
+    if (this.props.transactions.length !== prevProps.transactions.length) {
       this.setState({ activePage: 1 });
     }
   }
@@ -29,6 +29,7 @@ class TransactionsList extends Component {
     const { activePage, itemsCountPerPage } = this.state;
     const {
       classes,
+      bankAccounts,
       transactions,
       isLoading,
       handleTransactionCategoryUpdate,
@@ -40,11 +41,14 @@ class TransactionsList extends Component {
     const transactionItems = transactions
       .slice((activePage - 1) * itemsCountPerPage, (activePage - 1) * itemsCountPerPage + itemsCountPerPage)
       .map((transaction, index) => {
+        const account = bankAccounts.find(acc => acc.id === transaction.accountId);
+        const color = account.color || '';
         return (
           <TransactionItem
             key={transaction.id}
             index={index}
             {...transaction}
+            accountPreferredColor={color}
             handleTransactionCategoryUpdate={handleTransactionCategoryUpdate}
             handleTransactionSplit={handleTransactionSplit}
             handleTransactionUnsplit={handleTransactionUnsplit}

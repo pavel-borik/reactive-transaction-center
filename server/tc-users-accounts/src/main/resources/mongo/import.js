@@ -1,4 +1,8 @@
 try {
+    db.bankAccounts.deleteOne({"_id" : "5d6ebe65c845804efec7df02"});
+    db.bankAccounts.deleteOne({"_id" : "5d6ebe6832014484abc79249"});
+    db.bankAccounts.deleteOne({"_id" : "5d6ebe6a1f62f730cba8a176"});
+    db.bankAccounts.deleteOne({"_id" : "5d6ebe6d358632ab90fdaf11"});
     db.bankAccounts.insertMany([{
         "_id": "5d6ebe65c845804efec7df02",
         "user": "John Doe",

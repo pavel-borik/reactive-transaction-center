@@ -1,18 +1,18 @@
+import axios from 'axios';
 import {
   GET_TRANSACTIONS,
-  TRANSACTIONS_LOADING,
   SET_FILTER,
   UPDATE_TRANSACTION_CATEGORY,
   SPLIT_TRANSACTION,
   UNSPLIT_TRANSACTION
 } from './types';
-import axios from 'axios';
-import { API_CONN } from '../utils/connection';
+import { API_CONN_TRANSACTIONS } from '../utils/connection';
+import setDataLoading from './dataLoading';
 
-export const getData = () => async (dispatch, getState) => {
-  dispatch(setItemsLoading());
+export const getTransacations = () => async (dispatch, getState) => {
+  dispatch(setDataLoading());
   try {
-    const response = await axios.get(`${API_CONN}/transactions`);
+    const response = await axios.get(`${API_CONN_TRANSACTIONS}/transactions`);
     dispatch({
       type: GET_TRANSACTIONS,
       payload: response
@@ -25,14 +25,14 @@ export const getData = () => async (dispatch, getState) => {
 export const setTransactionFilter = (filterId, filterType) => {
   return {
     type: SET_FILTER,
-    payload: { filterId: filterId, filterType: filterType }
+    payload: { filterId, filterType }
   };
 };
 
 export const handleTransactionCategoryUpdate = (transactionId, newCategoryId) => dispatch => {
   axios({
     method: 'put',
-    url: `${API_CONN}/transactions/update`,
+    url: `${API_CONN_TRANSACTIONS}/transactions/update`,
     data: { id: transactionId, categoryId: newCategoryId }
   })
     .then(response => {
@@ -40,8 +40,8 @@ export const handleTransactionCategoryUpdate = (transactionId, newCategoryId) =>
       dispatch({
         type: UPDATE_TRANSACTION_CATEGORY,
         payload: {
-          transactionId: transactionId,
-          newCategoryId: newCategoryId
+          transactionId,
+          newCategoryId
         }
       });
     })
@@ -52,7 +52,7 @@ export const handleTransactionCategoryUpdate = (transactionId, newCategoryId) =>
 export const handleTransactionSplit = transactionSplitDto => dispatch => {
   axios({
     method: 'post',
-    url: `${API_CONN}/transactions/split`,
+    url: `${API_CONN_TRANSACTIONS}/transactions/split`,
     data: transactionSplitDto
   })
     .then(response => {
@@ -70,7 +70,7 @@ export const handleTransactionSplit = transactionSplitDto => dispatch => {
 export const handleTransactionUnsplit = (parentTransactionId, childTransactionId) => dispatch => {
   axios({
     method: 'post',
-    url: `${API_CONN}/transactions/removeSplit`,
+    url: `${API_CONN_TRANSACTIONS}/transactions/removeSplit`,
     data: { id: childTransactionId }
   })
     .then(response => {
@@ -78,8 +78,8 @@ export const handleTransactionUnsplit = (parentTransactionId, childTransactionId
       dispatch({
         type: UNSPLIT_TRANSACTION,
         payload: {
-          parentTransactionId: parentTransactionId,
-          childTransactionId: childTransactionId,
+          parentTransactionId,
+          childTransactionId,
           data: response.data
         }
       });
@@ -87,10 +87,4 @@ export const handleTransactionUnsplit = (parentTransactionId, childTransactionId
     .catch(error => {
       console.log(error);
     });
-};
-
-export const setItemsLoading = () => {
-  return {
-    type: TRANSACTIONS_LOADING
-  };
 };

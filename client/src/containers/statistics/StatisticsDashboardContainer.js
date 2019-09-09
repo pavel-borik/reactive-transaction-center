@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getData } from '../../actions/transactionActions';
+import { getTransacations } from '../../actions/transactionActions';
 import StatisticsDashboard from '../../components/statistics-dashboard/StatisticsDashboard';
 import { computeBarchartData } from '../../selectors/statisticsSelector';
 
 class StatisticsDashboardContainer extends Component {
   componentDidMount() {
-    this.props.getData();
+    this.props.getTransacations();
   }
 
   render() {
@@ -16,7 +16,7 @@ class StatisticsDashboardContainer extends Component {
 }
 
 StatisticsDashboardContainer.propTypes = {
-  getData: PropTypes.func.isRequired,
+  getTransacations: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired
 };
 
@@ -27,5 +27,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getData }
+  { getTransacations }
 )(StatisticsDashboardContainer);

@@ -1,6 +1,6 @@
 import {
   GET_RULES,
-  RULES_LOADING,
+  DATA_LOADING,
   TOGGLE_RULE_MODAL,
   RULE_ADD,
   RULE_EDIT,
@@ -25,7 +25,7 @@ export default function(state = initialState, action) {
         loading: false
       };
     }
-    case RULES_LOADING: {
+    case DATA_LOADING: {
       return {
         ...state,
         loading: true

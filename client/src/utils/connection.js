@@ -1,4 +1,6 @@
 const API_HOST = process.env.REACT_APP_API_HOST || 'localhost';
-const API_PORT = process.env.REACT_APP_API_PORT || '8080';
+const REACT_APP_API_PORT_TRANSACTIONS = process.env.REACT_APP_API_PORT_TRANSACTIONS || '8080';
+const REACT_APP_API_PORT_ACCOUNTS = process.env.REACT_APP_API_PORT_ACCOUNTS || '8081';
 
-export const API_CONN = `http://${API_HOST}:${API_PORT}`;
+export const API_CONN_TRANSACTIONS = `http://${API_HOST}:${REACT_APP_API_PORT_TRANSACTIONS}`;
+export const API_CONN_ACCOUNTS = `http://${API_HOST}:${REACT_APP_API_PORT_ACCOUNTS}`;

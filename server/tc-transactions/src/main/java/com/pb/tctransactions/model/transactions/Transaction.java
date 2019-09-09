@@ -19,8 +19,8 @@ public class Transaction {
 
     @Id
     private String id;
-    private long accountId;
-    private int categoryId;
+    private String accountId;
+    private String categoryId;
     private Map<TransactionCategory, BigDecimal> transactionCategoryInfo;
     private TransactionDirection direction;
     private TransactionType transactionType;

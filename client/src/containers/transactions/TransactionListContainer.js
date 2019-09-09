@@ -1,33 +1,30 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
-  getData,
+  getTransacations,
   handleTransactionCategoryUpdate,
   handleTransactionSplit,
   handleTransactionUnsplit
 } from '../../actions/transactionActions';
 import TransactionList from '../../components/transactions-dashboard/transaction-list/TransactionList';
-import { bindActionCreators } from 'redux';
 import { computeAccountBalance } from '../../selectors/statisticsSelector';
 import { filterTransactions } from '../../selectors/transactionSelector';
 
 class TransactionListContainer extends Component {
   componentDidMount() {
-    this.props.getData();
+    this.props.getTransacations();
   }
 
   render() {
-    return (
-      <Fragment>
-        <TransactionList {...this.props} />
-      </Fragment>
-    );
+    return <TransactionList {...this.props} />;
   }
 }
 
 const makeMapStateToProps = () => {
   const getVisibleTransactions = filterTransactions();
   const mapStateToProps = state => ({
+    bankAccounts: state.bankAccounts.bankAccounts,
     transactions: getVisibleTransactions(state),
     isLoading: state.transactions.loading,
     accountBalance: computeAccountBalance(state)
@@ -37,7 +34,7 @@ const makeMapStateToProps = () => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return bindActionCreators(
-    { getData, handleTransactionCategoryUpdate, handleTransactionSplit, handleTransactionUnsplit },
+    { getTransacations, handleTransactionCategoryUpdate, handleTransactionSplit, handleTransactionUnsplit },
     dispatch
   );
 };
