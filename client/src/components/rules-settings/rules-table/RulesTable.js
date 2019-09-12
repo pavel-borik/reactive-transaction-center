@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import EnhancedTableHead from './EnhancedTableHead';
-import EnhancedTableToolbar from './EnhancedTableToolbar';
 import { withStyles, Table, TableBody, TableCell, TablePagination, TableRow, Paper } from '@material-ui/core';
 import { Checkbox, Grow } from '@material-ui/core';
 import { Spinner } from 'reactstrap';
+import EnhancedTableToolbar from './EnhancedTableToolbar';
+import EnhancedTableHead from './EnhancedTableHead';
 import { TransactionCategories } from '../../../constants/categories';
 import { TransactionDirections, TransactionTypes } from '../../../constants/transactions';
 
@@ -108,14 +108,12 @@ class RulesTable extends Component {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(rule => {
                     const isSelected = this.isSelected(rule.id);
-                    const direction = Object.values(TransactionDirections).find(
-                      direction => direction.id === rule.direction
-                    ).text;
+                    const direction = Object.values(TransactionDirections).find(dir => dir.id === rule.direction).text;
                     const transactionType = Object.values(TransactionTypes).find(
                       type => type.id === rule.transactionType
                     ).text;
                     return (
-                      <Grow key={rule.id} in={true} timeout={500}>
+                      <Grow key={rule.id} in timeout={500}>
                         <TableRow
                           hover
                           onClick={event => this.handleRowClick(event, rule.id)}
@@ -182,7 +180,7 @@ class RulesTable extends Component {
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing(3)
   },
   table: {
     minWidth: 1020

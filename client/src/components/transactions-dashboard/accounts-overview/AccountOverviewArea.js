@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
+import { Spinner } from 'reactstrap';
 import AccountBalanceInfo from './AccountBalanceInfo';
 
 const dummyData = [
@@ -15,14 +16,19 @@ const AccountOverviewArea = props => {
     accountPreferredColor: 'red',
     balance: props.balance || 0
   };
-  const accounts = props.bankAccounts;
+  const { bankAccounts, isLoading } = props;
   return (
     <div>
       <h2>Accounts</h2>
+      {isLoading && (
+        <div className="text-center">
+          <Spinner type="grow" color="primary" />
+        </div>
+      )}
       <Grid container direction="row" spacing={4}>
-        {accounts.map((account, i) => {
+        {bankAccounts.map(account => {
           return (
-            <Grid item key={i}>
+            <Grid item key={account.id}>
               <AccountBalanceInfo accountInfo={account} />
             </Grid>
           );

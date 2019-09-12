@@ -37,7 +37,7 @@ export const IncomingTransactionCategories = Object.freeze({
 
 export const SpecialCategories = Object.freeze({
   UNCATEGORIZED: { id: '0', text: 'Uncategorized' },
-  SPLIT: { id: '-1', text: 'Various categories' }
+  SPLIT: { id: '1', text: 'Various categories' }
 });
 
 export const TransactionCategories = Object.freeze({
@@ -45,3 +45,14 @@ export const TransactionCategories = Object.freeze({
   ...OutgoingTransactionCategories,
   ...SpecialCategories
 });
+
+const makeLookup = () => {
+  const lookup = new Map();
+  Object.values(TransactionCategories).forEach(c => {
+    lookup.set(c.id, c.text);
+  });
+
+  return lookup;
+};
+
+export const TransactionCategoriesLookup = makeLookup();

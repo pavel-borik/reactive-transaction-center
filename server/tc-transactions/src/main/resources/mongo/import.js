@@ -1,7 +1,7 @@
 try {
-    db.transactions.deleteOne({"_id" : "5d6eba7daffb0f4248516477"});
-    db.transactions.deleteOne({"_id" : "5d6ebdb9341e35b5b657ec20"});
-    db.transactions.deleteOne({"_id" : "5d6ebdc8baa43c146d9ebfe8"});
+    db.transactions.deleteOne({"_id": "5d6eba7daffb0f4248516477"});
+    db.transactions.deleteOne({"_id": "5d6ebdb9341e35b5b657ec20"});
+    db.transactions.deleteOne({"_id": "5d6ebdc8baa43c146d9ebfe8"});
     db.transactions.insertMany([
         {
             "_id": "5d6eba7daffb0f4248516477",
@@ -17,6 +17,11 @@ try {
             "payerMessage": "Some msg",
             "payeeMessage": "",
             "categoryId": "113",
+            "transactionCategoryInfo": {
+                "111": 1000,
+                "112": 2000,
+                "113": 1357
+            },
             "transactionFee": 0,
             "transactionFeeCanceled": "true",
             "additionalInfoDomestic": {"constantSymbol": "", "variableSymbol": "", "specificSymbol": ""},
@@ -36,6 +41,7 @@ try {
             "payerMessage": "Some msg",
             "payeeMessage": "",
             "categoryId": "111",
+            "transactionCategoryInfo": null,
             "transactionFee": 0,
             "transactionFeeCanceled": "true",
             "additionalInfoDomestic": {"constantSymbol": "0", "variableSymbol": "1568973045", "specificSymbol": "0"},
@@ -55,6 +61,7 @@ try {
             "payerMessage": "Some msg",
             "payeeMessage": "",
             "categoryId": "112",
+            "transactionCategoryInfo": null,
             "transactionFee": 0,
             "transactionFeeCanceled": "true",
             "additionalInfoDomestic": {"constantSymbol": "0", "variableSymbol": "7933497310", "specificSymbol": "0"},

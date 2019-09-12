@@ -1,5 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
   getRules,
   toggleModal,
@@ -11,7 +12,6 @@ import {
 } from '../../actions/ruleActions';
 import RulesTable from '../../components/rules-settings/rules-table/RulesTable';
 import RuleFormController from '../../components/rules-settings/rules-form/RuleFormController';
-import { bindActionCreators } from 'redux';
 
 class RulesAreaContainer extends Component {
   componentDidMount() {
@@ -20,7 +20,7 @@ class RulesAreaContainer extends Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         <RulesTable
           rules={this.props.rules}
           loading={this.props.loading}
@@ -38,7 +38,7 @@ class RulesAreaContainer extends Component {
             handleRuleSubmitUpdate={state => this.props.handleRuleSubmitUpdate(state)}
           />
         )}
-      </Fragment>
+      </>
     );
   }
 }

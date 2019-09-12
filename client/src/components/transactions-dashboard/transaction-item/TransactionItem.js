@@ -7,7 +7,8 @@ import {
   OutgoingTransactionCategories,
   TransactionCategories,
   IncomingTransactionCategories,
-  SpecialCategories
+  SpecialCategories,
+  TransactionCategoriesLookup
 } from '../../../constants/categories';
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
 import { TransactionTypes, TransactionDirections } from '../../../constants/transactions';
@@ -60,6 +61,7 @@ class TransactionItem extends Component {
       index,
       id,
       categoryId,
+      transactionCategoryInfo,
       direction,
       accountPreferredColor,
       partyDescription,
@@ -128,10 +130,9 @@ class TransactionItem extends Component {
     //     activeDetail = detailTransfers;
     // }
 
-    const categoryEnum = Object.values(TransactionCategories).find(cat => cat.id === categoryId);
-    const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
+    const categoryText = TransactionCategoriesLookup.get(categoryId) || 'Unknown';
 
-    const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
+    const transactionTypeEnum = TransactionTypes[transactionType];
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
 
     const transactionCategories =
@@ -249,7 +250,7 @@ class TransactionItem extends Component {
           <TransactionItemPanelDetail
             detail={activeDetail}
             accountPreferredColor={accountPreferredColor}
-            // childTransactionsList={childTransactionsList}
+            transactionCategoryInfo={transactionCategoryInfo}
             handleTransactionUnsplit={this.props.handleTransactionUnsplit}
             transactionId={id}
           />

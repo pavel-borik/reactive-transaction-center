@@ -21,7 +21,7 @@ public class Transaction {
     private String id;
     private String accountId;
     private String categoryId;
-    private Map<TransactionCategory, BigDecimal> transactionCategoryInfo;
+    private Map<String, BigDecimal> transactionCategoryInfo;
     private TransactionDirection direction;
     private TransactionType transactionType;
     private TransactionValue value;

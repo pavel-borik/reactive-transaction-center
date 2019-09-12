@@ -9,7 +9,7 @@ class BankAccountContainer extends Component {
   }
 
   render() {
-    return <AccountOverviewArea bankAccounts={this.props.bankAccounts} />;
+    return <AccountOverviewArea bankAccounts={this.props.bankAccounts} isLoading={this.props.isLoading} />;
   }
 }
 
