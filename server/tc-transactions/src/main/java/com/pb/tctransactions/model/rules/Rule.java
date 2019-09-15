@@ -17,7 +17,7 @@ public class Rule {
     @Id
     private String id;
     private String ruleName;
-    private String categoryCode;
+    private String categoryId;
 
     // COMMON
     private String partyName;

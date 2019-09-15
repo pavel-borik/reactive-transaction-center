@@ -12,6 +12,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 
 @Configuration
 public class RuleEndpointConfig {
+
     @Bean
     RouterFunction<ServerResponse> ruleRoutes(RuleHandler ruleHandler) {
         return RouterFunctions

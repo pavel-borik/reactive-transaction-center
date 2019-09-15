@@ -4,7 +4,7 @@ import { Checkbox, Grow } from '@material-ui/core';
 import { Spinner } from 'reactstrap';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
 import EnhancedTableHead from './EnhancedTableHead';
-import { TransactionCategories } from '../../../constants/categories';
+import { TransactionCategories, TransactionCategoriesLookup } from '../../../constants/categories';
 import { TransactionDirections, TransactionTypes } from '../../../constants/transactions';
 
 class RulesTable extends Component {
@@ -126,7 +126,7 @@ class RulesTable extends Component {
                             {rule.ruleName}
                           </TableCell>
                           <TableCell align="left" padding="default">
-                            {Object.values(TransactionCategories).find(cat => cat.id == rule.categoryId).text}
+                            {TransactionCategoriesLookup.get(rule.categoryId) || 'Unknown category'}
                           </TableCell>
                           <TableCell align="left" padding="default">
                             {rule.partyName}

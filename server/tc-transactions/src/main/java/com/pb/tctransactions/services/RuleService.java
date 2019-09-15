@@ -45,7 +45,7 @@ public class RuleService {
 
     private List<RuleCondition> createConditions(Rule rule) {
         List<RuleCondition> conditions = new ArrayList<>();
-        conditions.add(new CategoryCondition(rule.getCategoryCode(), 0.5));
+        conditions.add(new CategoryCondition(rule.getCategoryId(), 0.5));
         if (StringUtils.isNotBlank(rule.getDirection())) {
             conditions.add(new DirectionCondition(rule.getDirection(), 0.5));
         }

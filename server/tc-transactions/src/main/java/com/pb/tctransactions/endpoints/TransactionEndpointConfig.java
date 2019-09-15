@@ -21,6 +21,7 @@ public class TransactionEndpointConfig {
         return RouterFunctions
                 .route(GET("/transactions"), transactionHandler::findAll)
                 .andRoute(GET("/transactions/{id}"), transactionHandler::findById)
+                .andRoute(GET("/transactionsinfo"), transactionHandler::resolveInfo)
                 .andRoute(POST("/transactions"), transactionHandler::create);
     }
 }

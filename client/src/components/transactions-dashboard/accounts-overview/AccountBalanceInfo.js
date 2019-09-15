@@ -4,8 +4,8 @@ import { Card, CardContent, Typography } from '@material-ui/core';
 
 const AccountBalanceInfo = props => {
   const { classes, accountInfo } = props;
-  const { prefix, accountNumber, bankCode, user, color } = accountInfo;
-  const balance = accountInfo.balance || 0;
+  const { prefix, accountNumber, bankCode, user, color, accountBalance } = accountInfo;
+  const balance = accountBalance || 0;
   const account = `${prefix}${prefix ? '-' : ''}${accountNumber}/${bankCode}`;
   return (
     <div>

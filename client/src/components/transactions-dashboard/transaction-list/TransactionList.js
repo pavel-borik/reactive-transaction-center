@@ -42,7 +42,7 @@ class TransactionsList extends Component {
       .slice((activePage - 1) * itemsCountPerPage, (activePage - 1) * itemsCountPerPage + itemsCountPerPage)
       .map((transaction, index) => {
         const account = bankAccounts.find(acc => acc.id === transaction.accountId);
-        const color = account.color || '';
+        const color = account ? account.color : '';
         return (
           <TransactionItem
             key={transaction.id}
