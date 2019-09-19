@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { ExpansionPanelDetails, Grid, Typography, IconButton } from '@material-ui/core';
+import { ExpansionPanelDetails, Divider, Typography, IconButton } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
-import { Row, Col } from 'reactstrap';
 import { TransactionCategories, TransactionCategoriesLookup } from '../../../constants/categories';
 
 class TransactionItemPanelDetail extends Component {
@@ -13,12 +12,12 @@ class TransactionItemPanelDetail extends Component {
   render() {
     const { detail, accountPreferredColor, transactionCategoryInfo } = this.props;
     return (
-      <ExpansionPanelDetails style={{ borderLeft: `6px solid ${accountPreferredColor}` }}>
-        <Grid item container direction="column">
+      <ExpansionPanelDetails style={{ borderLeft: `6px solid ${accountPreferredColor}`, marginTop: '-10px' }}>
+        <div style={{ width: '100%' }}>
+          <Divider style={{ marginBottom: '5px' }} />
           {transactionCategoryInfo && Object.entries(transactionCategoryInfo).length > 0 && (
-            <Col className="p-0">
-              <hr />
-              <Typography variant="title" className="mb-1">
+            <div className="p-0">
+              <Typography variant="h6" className="mb-1">
                 Split into categories:
               </Typography>
               {Object.entries(transactionCategoryInfo)
@@ -30,45 +29,40 @@ class TransactionItemPanelDetail extends Component {
                   const categoryText = TransactionCategoriesLookup.get(categoryId) || 'Unknown category';
                   const isUncategorized = categoryId === TransactionCategories.UNCATEGORIZED.id;
                   return (
-                    <Row noGutters>
-                      <Col xs="auto">
-                        <IconButton
-                          aria-label="Delete"
-                          className="p-0 mb-1"
-                          disabled={isUncategorized}
-                          onClick={e => this.handleTransactionUnsplit(e, categoryId)}
-                        >
-                          <ClearIcon fontSize="small" color={isUncategorized ? 'disabled' : 'error'} />
-                        </IconButton>
-                      </Col>
-                      <Col xs={2}> {categoryText}:</Col>
-                      <Col xs="auto">
-                        {categoryAmount.toLocaleString('cs-cz', {
-                          style: 'currency',
-                          currency: 'CZK'
-                        })}
-                      </Col>
-                    </Row>
+                    <div>
+                      <IconButton
+                        aria-label="Delete"
+                        className="p-0 mb-1"
+                        disabled={isUncategorized}
+                        onClick={e => this.handleTransactionUnsplit(e, categoryId)}
+                      >
+                        <ClearIcon fontSize="small" color={isUncategorized ? 'disabled' : 'error'} />
+                      </IconButton>
+                      {categoryText}
+                      {categoryAmount.toLocaleString('cs-cz', {
+                        style: 'currency',
+                        currency: 'CZK'
+                      })}
+                    </div>
                   );
                 })}
-            </Col>
+            </div>
           )}
 
           {detail && (
-            <Col className="p-0">
+            <div>
               <hr />
               <Typography variant="title" className="mb-1">
                 Detail:
               </Typography>
               {Object.entries(detail).map((it, i) => (
-                <Row noGutters={true} key={i}>
-                  <Col xs={2}>{it[0]}:</Col>
-                  <Col xs="auto">{it[1]}</Col>
-                </Row>
+                <div>
+                  {it[0]}:{it[1]}
+                </div>
               ))}
-            </Col>
+            </div>
           )}
-        </Grid>
+        </div>
       </ExpansionPanelDetails>
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow } from '@material-ui/core/';
-import { Button, Form, FormGroup, Col, Row, Input, Badge } from 'reactstrap';
+import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow, Chip } from '@material-ui/core/';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {
   OutgoingTransactionCategories,
@@ -13,12 +13,15 @@ import {
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
 import { TransactionTypes, TransactionDirections } from '../../../constants/transactions';
 import TransactionItemCategorySplitForm from './TransactionItemCategorySplitForm';
+import TransactionItemCategoryModal from './TransactionItemCategoryModal';
 
 class TransactionItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryId: UNSELECTED
+      categoryId: UNSELECTED,
+      chipHover: false,
+      categoryModalOpen: false
     };
   }
 
@@ -145,30 +148,44 @@ class TransactionItem extends Component {
     const valueCurrency = value.currency;
     const activeDetail = null;
     return (
-      <Grow in timeout={500 + 100 * index}>
-        <ExpansionPanel className="mb-2">
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            style={{ borderLeft: `6px solid ${accountPreferredColor}` }}
-          >
-            <Grid container direction="row">
-              <Grid item xs={12} md={1}>
-                <Typography className={classes.date}>{moment(valueDate).format('DD MMM YYYY')}</Typography>
-              </Grid>
-              <Grid item xs={12} md={11} className="ml-xs-3 ml-sm-0">
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item xs={9}>
-                    <Row>
-                      <Col xs={12} lg={4}>
-                        <Badge color="warning" pill>
-                          {categoryText}
-                        </Badge>
-                        <Typography className={classes.heading}>{partyDescription}</Typography>
-                        <Typography>
-                          <span className={classes.secondaryHeading}>{transactionTypeText}</span>
-                        </Typography>
-                      </Col>
-                      <Col xs={12} md={8}>
+      <div className="mb-2">
+        <Grow in timeout={500 + 100 * index}>
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              style={{ borderLeft: `6px solid ${accountPreferredColor}` }}
+            >
+              <div style={{ flexGrow: 1 }}>
+                <Grid container direction="row" justify="space-between" alignItems="center">
+                  <Grid item>
+                    {/* <Grid item xs={12} md={11} className="ml-xs-3 ml-sm-0"> */}
+                    {/* <Grid container justify="space-between" alignItems="center"> */}
+                    {/* <Row> */}
+                    {/* <Col xs={12} lg={4} className="m-0 p-0"> */}
+                    <Chip
+                      size="small"
+                      className={classes.chip}
+                      label={<Typography className={classes.chipLabel}>{categoryText}</Typography>}
+                      onMouseEnter={() => this.setState({ chipHover: true })}
+                      onMouseLeave={() => this.setState({ chipHover: false })}
+                      onDelete={
+                        this.state.chipHover || this.state.categoryModalOpen
+                          ? () => {
+                              this.setState({ categoryModalOpen: true });
+                            }
+                          : null
+                      }
+                      deleteIcon={<MoreHorizIcon />}
+                    />
+                    <Typography className={classes.heading}>{partyDescription}</Typography>
+                    <Typography>
+                      <span className={classes.secondaryHeading}>{transactionTypeText}</span>
+                    </Typography>
+                    <Typography className={classes.date}>{moment(valueDate).format('DD MMM YYYY')}</Typography>
+                  </Grid>
+                  <Grid item>
+                    {/* </Col> */}
+                    {/* <Col xs={12} md={8}>
                         <Grid container justify="flex-start" alignItems="center" className="mt-3">
                           <Grid item>
                             <Form inline>
@@ -220,11 +237,9 @@ class TransactionItem extends Component {
                             )}
                           </Grid>
                         </Grid>
-                      </Col>
-                    </Row>
-                  </Grid>
+                      </Col> */}
+                    {/* </Row> */}
 
-                  <Grid item xs={12} sm={3} className="text-lg-right pt-sm-0 pt-1">
                     {direction === TransactionDirections.OUTGOING.id && (
                       <Typography className={classes.amountNegative}>
                         &#8722;&nbsp;
@@ -244,18 +259,23 @@ class TransactionItem extends Component {
                     )}
                   </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          </ExpansionPanelSummary>
-          <TransactionItemPanelDetail
-            detail={activeDetail}
-            accountPreferredColor={accountPreferredColor}
-            transactionCategoryInfo={transactionCategoryInfo}
-            handleTransactionUnsplit={this.props.handleTransactionUnsplit}
-            transactionId={id}
-          />
-        </ExpansionPanel>
-      </Grow>
+              </div>
+            </ExpansionPanelSummary>
+            <TransactionItemPanelDetail
+              detail={activeDetail}
+              accountPreferredColor={accountPreferredColor}
+              transactionCategoryInfo={transactionCategoryInfo}
+              handleTransactionUnsplit={this.props.handleTransactionUnsplit}
+              transactionId={id}
+            />
+          </ExpansionPanel>
+        </Grow>
+        <TransactionItemCategoryModal
+          open={this.state.categoryModalOpen}
+          transactionCategoryInfo={transactionCategoryInfo}
+          handleModalClose={() => this.setState({ categoryModalOpen: false })}
+        />
+      </div>
     );
   }
 }
@@ -264,9 +284,8 @@ const UNSELECTED = 'UNSELECTED';
 
 const styles = theme => ({
   heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: 600,
-    marginTop: -2
+    fontSize: theme.typography.pxToRem(18),
+    fontWeight: 600
   },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
@@ -285,6 +304,13 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(18),
     color: 'red',
     fontWeight: 600
+  },
+  chip: {
+    background: '#ffbb33'
+  },
+  chipLabel: {
+    fontWeight: 600,
+    fontSize: theme.typography.pxToRem(12)
   }
 });
 
