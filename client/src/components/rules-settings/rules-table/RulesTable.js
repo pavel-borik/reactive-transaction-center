@@ -126,7 +126,7 @@ class RulesTable extends Component {
                             {rule.ruleName}
                           </TableCell>
                           <TableCell align="left" padding="default">
-                            {TransactionCategoriesLookup.get(rule.categoryId) || 'Unknown category'}
+                            {TransactionCategoriesLookup.get(rule.categoryId).text || 'Unknown category'}
                           </TableCell>
                           <TableCell align="left" padding="default">
                             {rule.partyName}

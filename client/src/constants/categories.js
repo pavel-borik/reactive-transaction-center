@@ -49,7 +49,7 @@ export const TransactionCategories = Object.freeze({
 const makeLookup = () => {
   const lookup = new Map();
   Object.values(TransactionCategories).forEach(c => {
-    lookup.set(c.id, c.text);
+    lookup.set(c.id, c);
   });
 
   return lookup;

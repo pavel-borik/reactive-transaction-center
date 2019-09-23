@@ -56,7 +56,7 @@ class TransactionsList extends Component {
       });
 
     return (
-      <div>
+      <div className="mt-3">
         <h2>Transactions</h2>
         <Grid container direction="column" spacing={2}>
           <Grid item>

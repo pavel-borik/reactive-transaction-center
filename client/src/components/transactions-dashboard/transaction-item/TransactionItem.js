@@ -13,7 +13,7 @@ import {
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
 import { TransactionTypes, TransactionDirections } from '../../../constants/transactions';
 import TransactionItemCategorySplitForm from './TransactionItemCategorySplitForm';
-import TransactionItemCategoryModal from './TransactionItemCategoryModal';
+import TransactionItemCategoryModal from './category-modal/TransactionItemCategoryModal';
 
 class TransactionItem extends Component {
   constructor(props) {
@@ -133,7 +133,16 @@ class TransactionItem extends Component {
     //     activeDetail = detailTransfers;
     // }
 
-    const categoryText = TransactionCategoriesLookup.get(categoryId) || 'Unknown';
+    let categoryText;
+    if (transactionCategoryInfo === null || Object.keys(transactionCategoryInfo).length === 0) {
+      categoryText = SpecialCategories.UNCATEGORIZED.text;
+    } else if (Object.keys(transactionCategoryInfo).length === 1) {
+      categoryText =
+        TransactionCategoriesLookup.get(Object.keys(transactionCategoryInfo)[0]).text ||
+        SpecialCategories.UNCATEGORIZED.text;
+    } else {
+      categoryText = SpecialCategories.SPLIT.text;
+    }
 
     const transactionTypeEnum = TransactionTypes[transactionType];
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
@@ -267,12 +276,14 @@ class TransactionItem extends Component {
               transactionCategoryInfo={transactionCategoryInfo}
               handleTransactionUnsplit={this.props.handleTransactionUnsplit}
               transactionId={id}
+              value={value}
             />
           </ExpansionPanel>
         </Grow>
         <TransactionItemCategoryModal
           open={this.state.categoryModalOpen}
           transactionCategoryInfo={transactionCategoryInfo}
+          transactionCategories={transactionCategories}
           handleModalClose={() => this.setState({ categoryModalOpen: false })}
         />
       </div>

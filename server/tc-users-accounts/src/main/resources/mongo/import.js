@@ -10,7 +10,7 @@ try {
         "prefix": "45",
         "accountNumber": "717717717",
         "bankCode": "0800",
-        "color": "RED"
+        "color": "ORANGE"
     }, {
         "_id": "5d6ebe6832014484abc79249",
         "user": "Jack Shaw",
