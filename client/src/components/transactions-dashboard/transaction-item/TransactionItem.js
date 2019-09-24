@@ -284,6 +284,7 @@ class TransactionItem extends Component {
           open={this.state.categoryModalOpen}
           transactionCategoryInfo={transactionCategoryInfo}
           transactionCategories={transactionCategories}
+          transactionValue={value}
           handleModalClose={() => this.setState({ categoryModalOpen: false })}
         />
       </div>

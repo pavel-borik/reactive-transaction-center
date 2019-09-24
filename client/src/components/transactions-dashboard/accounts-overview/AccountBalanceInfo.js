@@ -32,16 +32,14 @@ const AccountBalanceInfo = props => {
             {balance.toLocaleString('cs-cz', { style: 'currency', currency: 'CZK' })}
           </Typography>
         </CardContent>
-        <Collapse in={isHoveredOver}>
-          <CardActions className={classes.actions}>
-            <Button size="small" color="primary">
-              Edit
-            </Button>
-            <Button size="small" color="secondary">
-              Delete
-            </Button>
-          </CardActions>
-        </Collapse>
+        <CardActions className={classes.actions}>
+          <Button size="small" color="primary">
+            Edit
+          </Button>
+          <Button size="small" color="secondary">
+            Delete
+          </Button>
+        </CardActions>
       </Card>
     </div>
   );

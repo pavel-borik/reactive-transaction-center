@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     minWidth: '200px',
-    minHeight: '200px',
+    minHeight: '150px',
     padding: theme.spacing(2, 4, 3)
   }
 }));
@@ -39,7 +39,7 @@ const TransactionItemCategoryModal = props => {
   const FORM_CATEGORY_SINGLE = 'categSingle';
   const FORM_CATEGORY_SPLIT = 'categSplit';
   const classes = useStyles();
-  const { transactionCategories, transactionCategoryInfo } = props;
+  const { transactionCategories, transactionCategoryInfo, transactionValue } = props;
   const defaultMode = Object.keys(transactionCategoryInfo).length > 1 ? FORM_CATEGORY_SPLIT : FORM_CATEGORY_SINGLE;
   const [rgValue, setRgValue] = React.useState(defaultMode);
 
@@ -79,6 +79,7 @@ const TransactionItemCategoryModal = props => {
                     <CategorySplitForm
                       transactionCategories={transactionCategories}
                       transactionCategoryInfo={transactionCategoryInfo}
+                      transactionValue={transactionValue}
                     />
                   )}
                 </div>
