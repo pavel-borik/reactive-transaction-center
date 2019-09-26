@@ -28,7 +28,6 @@ class TransactionsList extends Component {
   render() {
     const { activePage, itemsCountPerPage } = this.state;
     const {
-      classes,
       bankAccounts,
       transactions,
       isLoading,
@@ -57,13 +56,13 @@ class TransactionsList extends Component {
       });
 
     return (
-      <div className={classes.root}>
+      <div className="mt-3">
         <h2>Transactions</h2>
-        <Grid container direction="column" spacing={8}>
-          <Grid item xs>
+        <Grid container direction="column" spacing={2}>
+          <Grid item>
             <TransactionFilterContainer />
           </Grid>
-          <Grid item xs>
+          <Grid item>
             {isLoading ? (
               <div className="text-center">
                 <Spinner type="grow" color="primary" />
@@ -72,7 +71,7 @@ class TransactionsList extends Component {
               transactionItems
             )}
           </Grid>
-          <Grid item container xs justify="center" className="mt-3">
+          <Grid item container justify="center" className="">
             <Pagination
               itemClass="page-item"
               linkClass="page-link"
@@ -90,17 +89,8 @@ class TransactionsList extends Component {
 }
 
 TransactionsList.propTypes = {
-  classes: PropTypes.object.isRequired,
   transactions: PropTypes.array.isRequired,
   isLoading: PropTypes.bool.isRequired
 };
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: '20px',
-    marginBottom: '70px'
-  }
-});
-
-export default withStyles(styles)(TransactionsList);
+export default TransactionsList;

@@ -26,13 +26,15 @@ const AccountOverviewArea = props => {
         </div>
       )}
       <Grid container direction="row" spacing={4}>
-        {bankAccounts.map(account => {
-          return (
-            <Grid item key={account.id}>
-              <AccountBalanceInfo accountInfo={account} />
-            </Grid>
-          );
-        })}
+        {bankAccounts
+          .sort((account1, account2) => account2.accountBalance - account1.accountBalance)
+          .map(account => {
+            return (
+              <Grid item key={account.id}>
+                <AccountBalanceInfo accountInfo={account} />
+              </Grid>
+            );
+          })}
       </Grid>
     </div>
   );

@@ -30,7 +30,7 @@ try {
         {
             "_id": "5d6ebdb9341e35b5b657ec20",
             "accountId": "5d6ebe65c845804efec7df02",
-            "value": {"amount": 2448, "currency": "CZK"},
+            "value": {"amount": 15000, "currency": "CZK"},
             "partyAccount": {"prefix": "00000865", "accountNumber": "307421973845", "bankCode": "0600"},
             "partyDescription": "Shufflester",
             "direction": "INCOMING",
@@ -40,8 +40,10 @@ try {
             "userDescription": "fusce consequat nulla",
             "payerMessage": "Some msg",
             "payeeMessage": "",
-            "categoryId": "111",
-            "transactionCategoryInfo": null,
+            "categoryId": "11",
+            "transactionCategoryInfo": {
+               "11": 15000,
+            },
             "transactionFee": 0,
             "transactionFeeCanceled": "true",
             "additionalInfoDomestic": {"constantSymbol": "0", "variableSymbol": "1568973045", "specificSymbol": "0"},
@@ -61,7 +63,9 @@ try {
             "payerMessage": "Some msg",
             "payeeMessage": "",
             "categoryId": "112",
-            "transactionCategoryInfo": null,
+            "transactionCategoryInfo": {
+               "112": 5313,
+            },
             "transactionFee": 0,
             "transactionFeeCanceled": "true",
             "additionalInfoDomestic": {"constantSymbol": "0", "variableSymbol": "7933497310", "specificSymbol": "0"},
