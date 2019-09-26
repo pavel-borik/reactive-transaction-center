@@ -1,24 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Modal,
-  Backdrop,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  Typography,
-  IconButton,
-  Grid
-} from '@material-ui/core';
+import { Modal, Backdrop, FormControl, FormControlLabel, RadioGroup, Radio, Typography } from '@material-ui/core';
 import Fade from '@material-ui/core/Fade';
-import ClearIcon from '@material-ui/icons/Clear';
-import { Button, Form, FormGroup, Col, Row, Input, Badge } from 'reactstrap';
-
-import { TransactionCategoriesLookup, TransactionCategories } from '../../../../constants/categories';
-import SingleCategoryForm from './SingleCategoryForm';
-import CategorySplitForm from './CategorySplitForm';
+import SingleCategoryForm from './SingleCategoryForm.tsx';
+import CategorySplitForm from './CategorySplitForm.tsx';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -39,7 +24,7 @@ const TransactionItemCategoryModal = props => {
   const FORM_CATEGORY_SINGLE = 'categSingle';
   const FORM_CATEGORY_SPLIT = 'categSplit';
   const classes = useStyles();
-  const { transactionCategories, transactionCategoryInfo, transactionValue } = props;
+  const { transactionCategories, transactionCategoryInfo, transactionValue, open, handleModalClose } = props;
   const defaultMode = Object.keys(transactionCategoryInfo).length > 1 ? FORM_CATEGORY_SPLIT : FORM_CATEGORY_SINGLE;
   const [rgValue, setRgValue] = React.useState(defaultMode);
 
@@ -51,15 +36,15 @@ const TransactionItemCategoryModal = props => {
     <div>
       <Modal
         className={classes.modal}
-        open={props.open}
-        onClose={props.handleModalClose}
+        open={open}
+        onClose={handleModalClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500
         }}
       >
-        <Fade in={props.open}>
+        <Fade in={open}>
           <div className={classes.paper}>
             <Typography variant="h5">Category edit</Typography>
             <FormControl component="fieldset" className={classes.formControl}>

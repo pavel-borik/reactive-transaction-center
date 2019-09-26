@@ -12,7 +12,6 @@ import {
 } from '../../../constants/categories';
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
 import { TransactionTypes, TransactionDirections } from '../../../constants/transactions';
-import TransactionItemCategorySplitForm from './TransactionItemCategorySplitForm';
 import TransactionItemCategoryModal from './category-modal/TransactionItemCategoryModal';
 
 class TransactionItem extends Component {
@@ -79,60 +78,6 @@ class TransactionItem extends Component {
       transactionType
     } = this.props;
 
-    // const isParentTransaction = childTransactionsList !== null && childTransactionsList.length > 0 && parentId === null;
-    // const isSplitableTransaction = childTransactionsList !== null && parentId === null;
-    // const valueAmount = isParentTransaction ? originalValue : transactionValueAmount;
-
-    // let maxValueToAssign = 0;
-    // if (isSplitableTransaction) {
-    //   const uncategorizedChild = childTransactionsList.find(
-    //     it => it.categoryId === TransactionCategories.UNCATEGORIZED.id
-    //   );
-    //   if (uncategorizedChild !== undefined) {
-    //     maxValueToAssign = uncategorizedChild.amount;
-    //   } else {
-    //     maxValueToAssign = valueAmount;
-    //   }
-    // }
-
-    // let isSplitOffered = false;
-    // if (isParentTransaction) {
-    //   isSplitOffered = maxValueToAssign > 0;
-    // } else {
-    //   isSplitOffered = categoryId === TransactionCategories.UNCATEGORIZED.id;
-    // }
-
-    // const invalidForNewCategorySubmit =
-    //   this.state.categoryId === UNSELECTED ||
-    //   categoryId === this.state.categoryId ||
-    //   transactionType === TransactionTypes.CASH.id ||
-    //   isParentTransaction;
-
-    // const categoryEnum = this.getCategoryEnum(isParentTransaction, childTransactionsList, categoryId, valueAmount);
-    // const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
-    // const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
-    // const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
-    // const transactionCategories =
-    //   direction === TransactionDirections.INCOMING.id ? IncomingTransactionCategories : OutgoingTransactionCategories;
-    // const detailCardPayments = { 'Merchant name': transactionAdditionalInfoCardMerchantName };
-    // const detailTransfers = {
-    //   'Party account': `${transactionPartyAccountPrefix}-${transactionPartyAccountAccountNumber}/${transactionPartyAccountBankCode}`,
-    //   'Variable symbol': transactionAdditionalInfoDomesticVariableSymbol,
-    //   'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol,
-    //   Message: `${direction === TransactionDirections.INCOMING.id ? payeeMessage : payerMessage}`
-    // };
-    // let activeDetail;
-    // switch (transactionType) {
-    //   case TransactionTypes.CARD.id:
-    //     activeDetail = detailCardPayments;
-    //     break;
-    //   case TransactionTypes.CASH.id:
-    //     activeDetail = null;
-    //     break;
-    //   default:
-    //     activeDetail = detailTransfers;
-    // }
-
     let categoryText;
     if (transactionCategoryInfo === null || Object.keys(transactionCategoryInfo).length === 0) {
       categoryText = SpecialCategories.UNCATEGORIZED.text;
@@ -167,10 +112,6 @@ class TransactionItem extends Component {
               <div style={{ flexGrow: 1 }}>
                 <Grid container direction="row" justify="space-between" alignItems="center">
                   <Grid item>
-                    {/* <Grid item xs={12} md={11} className="ml-xs-3 ml-sm-0"> */}
-                    {/* <Grid container justify="space-between" alignItems="center"> */}
-                    {/* <Row> */}
-                    {/* <Col xs={12} lg={4} className="m-0 p-0"> */}
                     <Chip
                       size="small"
                       className={classes.chip}
@@ -193,62 +134,6 @@ class TransactionItem extends Component {
                     <Typography className={classes.date}>{moment(valueDate).format('DD MMM YYYY')}</Typography>
                   </Grid>
                   <Grid item>
-                    {/* </Col> */}
-                    {/* <Col xs={12} md={8}>
-                        <Grid container justify="flex-start" alignItems="center" className="mt-3">
-                          <Grid item>
-                            <Form inline>
-                              <FormGroup className="p-0 m-0">
-                                <Input
-                                  type="select"
-                                  name="categorySelect"
-                                  id="categorySelect"
-                                  onChange={e => this.handleCategoryChange(e)}
-                                  onClick={e => {
-                                    e.stopPropagation();
-                                  }}
-                                  disabled={false}
-                                  value={this.state.categoryId}
-                                  bsSize="sm"
-                                  style={{ width: 220 }}
-                                >
-                                  <option disabled value={UNSELECTED}>
-                                    -- select a category --
-                                  </option>
-                                  {Object.values(transactionCategories).map(c => (
-                                    <option key={c.id} value={c.id}>
-                                      {c.text}
-                                    </option>
-                                  ))}
-                                </Input>
-
-                                <Button
-                                  color={invalidForNewCategorySubmit ? 'secondary' : 'primary'}
-                                  type="submit"
-                                  className="ml-md-2"
-                                  disabled={invalidForNewCategorySubmit}
-                                  size="sm"
-                                  onClick={this.handleTransactionCategoryUpdate}
-                                >
-                                  Save
-                                </Button>
-                              </FormGroup>
-                            </Form>
-                          </Grid>
-                          <Grid item xs={12} md="auto" className="ml-xl-2">
-                            {isSplitOffered && (
-                              <TransactionItemCategorySplitForm
-                                transactionCategories={transactionCategories}
-                                handleTransactionSplit={this.props.handleTransactionSplit}
-                                transactionId={id}
-                                maxValueToAssign={maxValueToAssign}
-                              />
-                            )}
-                          </Grid>
-                        </Grid>
-                      </Col> */}
-                    {/* </Row> */}
-
                     {direction === TransactionDirections.OUTGOING.id && (
                       <Typography className={classes.amountNegative}>
                         &#8722;&nbsp;

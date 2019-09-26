@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, IconButton, Grid, Divider } from '@material-ui/core';
+import { Typography, IconButton, Grid, Divider, Tooltip } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import {
@@ -7,29 +7,27 @@ import {
   TransactionCategories,
   SpecialCategories
 } from '../../../../constants/categories';
+import { CategoryModalFormProps, TransactionCategorySplitInfo } from './types';
 
-const CategorySplitForm = props => {
+const CategorySplitForm: React.FunctionComponent<CategoryModalFormProps> = props => {
   const { transactionCategoryInfo, transactionCategories } = props;
   const UNSELECTED = 'UNSELECTED';
-  const [categorySplitInfo, changeCategorySplitInfo] = React.useState({
+  const [categorySplitInfo, changeCategorySplitInfo] = React.useState<TransactionCategorySplitInfo>({
     ...transactionCategoryInfo,
     [SpecialCategories.UNCATEGORIZED.id]: 0
   });
-  const [splitAmount, handleSplitAmountChange] = React.useState(0);
-  const [categoryIdToSplit, handleCategoryInputChange] = React.useState(UNSELECTED);
+  const [splitAmount, handleSplitAmountChange] = React.useState<string>('0');
+  const [categoryIdToSplit, handleCategoryInputChange] = React.useState<string>(UNSELECTED);
   const freeToAssign = categorySplitInfo[SpecialCategories.UNCATEGORIZED.id];
-  const regex = /^[0-9]+(\.[0-9]{1,2})?$/;
-  const invalidForApply = !parseFloat(splitAmount) > 0 || categoryIdToSplit === UNSELECTED;
+  const invalidForApply = !(parseFloat(splitAmount) > 0) || categoryIdToSplit === UNSELECTED;
   const validForSubmit =
-    parseFloat(freeToAssign) === 0 &&
+    freeToAssign === 0 &&
     Object.keys(categorySplitInfo).filter(key => key !== SpecialCategories.UNCATEGORIZED.id).length > 1;
 
-  const handleInputChange = event => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     switch (event.target.name) {
       case 'splitAmount':
-        regex.test(event.target.value)
-          ? handleSplitAmountChange(event.target.value)
-          : handleSplitAmountChange(splitAmount);
+        handleSplitAmountInputFormatting(event.target.value, freeToAssign);
         break;
       case 'selectSplitCategoryId':
         handleCategoryInputChange(event.target.value);
@@ -39,15 +37,30 @@ const CategorySplitForm = props => {
     }
   };
 
-  const add = (a, b) => {
-    return Number.parseFloat((parseFloat(a) + parseFloat(b)).toFixed(2));
+  const handleSplitAmountInputFormatting = (inputValue: string, freeToAssign: number): void => {
+    const regex = /^[0-9]+(\.[0-9]{1,2})?$/;
+
+    if (regex.test(inputValue)) {
+      if (parseFloat(inputValue) < freeToAssign) {
+        console.log('h');
+        handleSplitAmountChange(inputValue);
+      } else {
+        handleSplitAmountChange(freeToAssign.toString());
+      }
+    } else {
+      handleSplitAmountChange(splitAmount);
+    }
   };
 
-  const subtract = (a, b) => {
-    return Number.parseFloat((parseFloat(a) - parseFloat(b)).toFixed(2));
+  const add = (a: string | number, b: string | number): number => {
+    return Number.parseFloat((parseFloat(a.toString()) + parseFloat(b.toString())).toFixed(2));
   };
 
-  const handleTransactionSplit = () => {
+  const subtract = (a: string | number, b: string | number): number => {
+    return Number.parseFloat((parseFloat(a.toString()) - parseFloat(b.toString())).toFixed(2));
+  };
+
+  const handleTransactionSplit = (): void => {
     const val = categorySplitInfo[categoryIdToSplit];
     const newFree = subtract(freeToAssign, splitAmount);
     if (val !== undefined) {
@@ -57,23 +70,24 @@ const CategorySplitForm = props => {
         [categoryIdToSplit]: newVal,
         [SpecialCategories.UNCATEGORIZED.id]: newFree
       });
-      return;
+    } else {
+      changeCategorySplitInfo({
+        ...categorySplitInfo,
+        [categoryIdToSplit]: add(0, splitAmount),
+        [SpecialCategories.UNCATEGORIZED.id]: newFree
+      });
     }
-    changeCategorySplitInfo({
-      ...categorySplitInfo,
-      [categoryIdToSplit]: add(0, splitAmount),
-      [SpecialCategories.UNCATEGORIZED.id]: newFree
-    });
+    handleSplitAmountInputFormatting(splitAmount, newFree);
   };
 
-  const handleTranactionUnsplit = (event, categoryId, categoryAmount) => {
+  const handleTranactionUnsplit = (categoryId: string, categoryAmount: number): void => {
     const newFreeToAssign = add(freeToAssign, categoryAmount);
     const modifiedSplit = {
       ...categorySplitInfo,
       [categoryId]: 0,
       [SpecialCategories.UNCATEGORIZED.id]: newFreeToAssign
     };
-    const result = Object.entries(modifiedSplit).reduce((accumulator, entry) => {
+    const result = Object.entries(modifiedSplit).reduce((accumulator: any, entry) => {
       const key = entry[0];
       const value = entry[1];
 
@@ -90,9 +104,13 @@ const CategorySplitForm = props => {
     <div>
       <Grid container direction="row" justify="space-between">
         <Typography>To assign:</Typography>
-        <Typography variant="h3">{freeToAssign}</Typography>
+        <Typography variant="h4">
+          {freeToAssign.toLocaleString('cs-cz', {
+            style: 'currency',
+            currency: 'CZK'
+          })}
+        </Typography>
       </Grid>
-      <Divider />
       <Form>
         <FormGroup>
           <Label for="">Amount</Label>
@@ -136,7 +154,7 @@ const CategorySplitForm = props => {
               color={invalidForApply ? 'secondary' : 'primary'}
               style={{ width: 80 }}
               size="sm"
-              onClick={e => handleTransactionSplit(e)}
+              onClick={() => handleTransactionSplit()}
               disabled={invalidForApply}
             >
               Apply
@@ -166,7 +184,7 @@ const CategorySplitForm = props => {
                         aria-label="Delete"
                         className="p-0 mb-1"
                         disabled={isUncategorized}
-                        onClick={e => handleTranactionUnsplit(e, categoryId, categoryAmount)}
+                        onClick={() => handleTranactionUnsplit(categoryId, categoryAmount)}
                       >
                         <ClearIcon fontSize="small" color={isUncategorized ? 'disabled' : 'error'} />
                       </IconButton>
@@ -187,23 +205,25 @@ const CategorySplitForm = props => {
       <Divider />
       <Form>
         <FormGroup className="text-right">
-          <Button
-            name="submitNewSplit"
-            color={validForSubmit ? 'primary' : 'secondary'}
-            className="mt-2"
-            style={{ width: 80 }}
-            size="sm"
-            //onClick={e => handleTransactionSplit(e)}
-            disabled={!validForSubmit}
-          >
-            Save
-          </Button>
+          <Tooltip title="You have to split the transaction into two or more categories. No uncategorized amount is allowed.">
+            <span>
+              <Button
+                name="submitNewSplit"
+                color={validForSubmit ? 'primary' : 'secondary'}
+                className="mt-2"
+                style={!validForSubmit ? { pointerEvents: 'none', width: 80 } : { width: 80 }}
+                size="sm"
+                //onClick={e => handleTransactionSplit(e)}
+                disabled={!validForSubmit}
+              >
+                Save
+              </Button>
+            </span>
+          </Tooltip>
         </FormGroup>
       </Form>
     </div>
   );
 };
-
-CategorySplitForm.propTypes = {};
 
 export default CategorySplitForm;
