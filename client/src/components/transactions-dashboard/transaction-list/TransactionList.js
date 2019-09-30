@@ -27,14 +27,7 @@ class TransactionsList extends Component {
 
   render() {
     const { activePage, itemsCountPerPage } = this.state;
-    const {
-      bankAccounts,
-      transactions,
-      isLoading,
-      handleTransactionCategoryUpdate,
-      handleTransactionSplit,
-      handleTransactionUnsplit
-    } = this.props;
+    const { bankAccounts, transactions, isLoading, handleTransactionSplit, handleTransactionUnsplit } = this.props;
 
     const nonChildTransactions = transactions.filter(t => t.parentId === null);
     const transactionItems = transactions
@@ -48,7 +41,6 @@ class TransactionsList extends Component {
             index={index}
             {...transaction}
             accountPreferredColor={color}
-            handleTransactionCategoryUpdate={handleTransactionCategoryUpdate}
             handleTransactionSplit={handleTransactionSplit}
             handleTransactionUnsplit={handleTransactionUnsplit}
           />

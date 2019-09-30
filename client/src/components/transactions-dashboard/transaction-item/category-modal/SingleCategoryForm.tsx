@@ -4,7 +4,7 @@ import { Button, Form, FormGroup, Input } from 'reactstrap';
 import { CategoryModalFormProps } from './types';
 
 const SingleCategoryForm: React.FunctionComponent<CategoryModalFormProps> = props => {
-  const { transactionCategories, transactionCategoryInfo } = props;
+  const { transactionCategories, transactionCategoryInfo, handleFormCategoryInfoUpdate, transactionValue } = props;
   const UNSELECTED = 'UNSELECTED';
   const SELECT_PLACEHOLDER = '-- select a category --';
   const selectedCategoryDefault =
@@ -52,7 +52,10 @@ const SingleCategoryForm: React.FunctionComponent<CategoryModalFormProps> = prop
                   type="submit"
                   disabled={invalidForNewCategorySubmit}
                   size="sm"
-                  // onClick={this.handleTransactionCategoryUpdate}
+                  onClick={e => {
+                    e.preventDefault();
+                    handleFormCategoryInfoUpdate({ [selectedCategory]: transactionValue.amount });
+                  }}
                   style={{ width: 80 }}
                 >
                   Save

@@ -1,6 +1,7 @@
 package com.pb.tctransactions.services;
 
 import com.pb.tctransactions.dto.TransactionBalanceInfoDto;
+import com.pb.tctransactions.dto.TransactionCategoryInfoUpdateDto;
 import com.pb.tctransactions.model.enums.TransactionDirection;
 import com.pb.tctransactions.model.transactions.Transaction;
 import com.pb.tctransactions.repositories.TransactionRepository;
@@ -59,8 +60,13 @@ public class TransactionService {
         return this.transactionRepository.findById(id);
     }
 
-    public Mono<Transaction> update(String id, Transaction t) {
-        return this.transactionRepository.save(t);
+    public Mono<Transaction> updateCategoryInfo(TransactionCategoryInfoUpdateDto dto) {
+        return transactionRepository
+                .findById(dto.getId())
+                .flatMap(transaction -> {
+                    transaction.setTransactionCategoryInfo(dto.getTransactionCategoryInfo());
+                    return transactionRepository.save(transaction);
+                });
     }
 
     public Mono<Transaction> create(Transaction t) {

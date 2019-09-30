@@ -3,6 +3,10 @@ export interface ITransactionCategory {
   text: string;
 }
 
+export interface ITransactionValue {
+  amount: number;
+  currency: string;
+}
 export type TransactionCategorySplitInfo = Record<string, number>;
 
 export type CategoryModalFormProps = {
@@ -10,4 +14,6 @@ export type CategoryModalFormProps = {
   transactionCategories: {
     [key: string]: ITransactionCategory;
   };
+  transactionValue: ITransactionValue;
+  handleFormCategoryInfoUpdate: (newCategoryInfo: TransactionCategorySplitInfo) => void;
 };

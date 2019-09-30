@@ -1,23 +1,23 @@
 package com.pb.tctransactions.model.transactions;
 
-import com.pb.tctransactions.model.enums.TransactionCategory;
 import com.pb.tctransactions.model.enums.TransactionDirection;
 import com.pb.tctransactions.model.enums.TransactionType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
 import java.math.BigDecimal;
 import java.util.Map;
 
 @Document(collection = "transactions")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Transaction {
 
     @Id
+    @MongoId
     private String id;
     private String accountId;
     private String categoryId;

@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  getTransacations,
-  handleTransactionCategoryUpdate,
-  handleTransactionSplit,
-  handleTransactionUnsplit
-} from '../../actions/transactionActions';
+import { getTransacations, handleTransactionSplit, handleTransactionUnsplit } from '../../actions/transactionActions';
 import TransactionList from '../../components/transactions-dashboard/transaction-list/TransactionList';
 import { computeAccountBalance } from '../../selectors/statisticsSelector';
 import { filterTransactions } from '../../selectors/transactionSelector';
@@ -33,10 +28,7 @@ const makeMapStateToProps = () => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return bindActionCreators(
-    { getTransacations, handleTransactionCategoryUpdate, handleTransactionSplit, handleTransactionUnsplit },
-    dispatch
-  );
+  return bindActionCreators({ getTransacations, handleTransactionSplit, handleTransactionUnsplit }, dispatch);
 };
 
 export default connect(

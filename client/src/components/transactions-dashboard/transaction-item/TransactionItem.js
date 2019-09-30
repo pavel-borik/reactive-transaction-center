@@ -12,7 +12,7 @@ import {
 } from '../../../constants/categories';
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
 import { TransactionTypes, TransactionDirections } from '../../../constants/transactions';
-import TransactionItemCategoryModal from './category-modal/TransactionItemCategoryModal';
+import TransactionCategoryModalContainer from '../../../containers/transaction-item/TransactionCategoryModalContainer.tsx';
 
 class TransactionItem extends Component {
   constructor(props) {
@@ -33,12 +33,6 @@ class TransactionItem extends Component {
 
   handleCategoryChange = event => {
     this.setState({ categoryId: event.target.value });
-  };
-
-  handleTransactionCategoryUpdate = event => {
-    event.stopPropagation();
-    event.preventDefault();
-    this.props.handleTransactionCategoryUpdate(this.props.id, this.state.categoryId);
   };
 
   getCategoryEnum = (isParentTransaction, childTransactionsList, transactionCategoryId, transactionValue) => {
@@ -165,8 +159,9 @@ class TransactionItem extends Component {
             />
           </ExpansionPanel>
         </Grow>
-        <TransactionItemCategoryModal
+        <TransactionCategoryModalContainer
           open={this.state.categoryModalOpen}
+          transactionId={id}
           transactionCategoryInfo={transactionCategoryInfo}
           transactionCategories={transactionCategories}
           transactionValue={value}

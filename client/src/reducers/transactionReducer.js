@@ -3,7 +3,7 @@ import {
   GET_TRANSACTIONS,
   DATA_LOADING,
   SET_FILTER,
-  UPDATE_TRANSACTION_CATEGORY,
+  UPDATE_TRANSACTION_CATEGORY_INFO,
   SPLIT_TRANSACTION,
   UNSPLIT_TRANSACTION
 } from '../actions/types';
@@ -48,12 +48,12 @@ export default (state = initialState, action) => {
         }
       };
     }
-    case UPDATE_TRANSACTION_CATEGORY: {
+    case UPDATE_TRANSACTION_CATEGORY_INFO: {
       return {
         ...state,
         transactions: state.transactions.map(t => {
           if (t.id === action.payload.transactionId) {
-            t.categoryId = action.payload.newCategoryId;
+            t.transactionCategoryInfo = action.payload.transactionCategoryInfo;
             return t;
           }
           return t;

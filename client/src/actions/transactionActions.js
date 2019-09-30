@@ -2,7 +2,7 @@ import axios from 'axios';
 import {
   GET_TRANSACTIONS,
   SET_FILTER,
-  UPDATE_TRANSACTION_CATEGORY,
+  UPDATE_TRANSACTION_CATEGORY_INFO,
   SPLIT_TRANSACTION,
   UNSPLIT_TRANSACTION
 } from './types';
@@ -29,24 +29,26 @@ export const setTransactionFilter = (filterId, filterType) => {
   };
 };
 
-export const handleTransactionCategoryUpdate = (transactionId, newCategoryId) => dispatch => {
+export const handleTransactionCategoryInfoUpdate = (transactionId, newCategoryInfo) => dispatch => {
   axios({
     method: 'put',
-    url: `${API_CONN_TRANSACTIONS}/transactions/update`,
-    data: { id: transactionId, categoryId: newCategoryId }
+    url: `${API_CONN_TRANSACTIONS}/transactions/categoryInfo`,
+    data: { id: transactionId, transactionCategoryInfo: newCategoryInfo }
   })
     .then(response => {
       console.log(response);
-      dispatch({
-        type: UPDATE_TRANSACTION_CATEGORY,
-        payload: {
-          transactionId,
-          newCategoryId
-        }
-      });
+      if (response.status === 202) {
+        dispatch({
+          type: UPDATE_TRANSACTION_CATEGORY_INFO,
+          payload: {
+            transactionId,
+            transactionCategoryInfo: newCategoryInfo
+          }
+        });
+      }
     })
     .catch(error => {
-      console.log(error);
+      console.error(error);
     });
 };
 export const handleTransactionSplit = transactionSplitDto => dispatch => {
@@ -63,7 +65,7 @@ export const handleTransactionSplit = transactionSplitDto => dispatch => {
       });
     })
     .catch(error => {
-      console.log(error);
+      console.error(error);
     });
 };
 
@@ -85,6 +87,6 @@ export const handleTransactionUnsplit = (parentTransactionId, childTransactionId
       });
     })
     .catch(error => {
-      console.log(error);
+      console.error(error);
     });
 };

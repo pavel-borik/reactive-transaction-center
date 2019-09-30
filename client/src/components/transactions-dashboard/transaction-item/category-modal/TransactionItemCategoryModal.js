@@ -24,12 +24,24 @@ const TransactionItemCategoryModal = props => {
   const FORM_CATEGORY_SINGLE = 'categSingle';
   const FORM_CATEGORY_SPLIT = 'categSplit';
   const classes = useStyles();
-  const { transactionCategories, transactionCategoryInfo, transactionValue, open, handleModalClose } = props;
+  const {
+    transactionId,
+    transactionCategories,
+    transactionCategoryInfo,
+    transactionValue,
+    handleTransactionCategoryInfoUpdate,
+    open,
+    handleModalClose
+  } = props;
   const defaultMode = Object.keys(transactionCategoryInfo).length > 1 ? FORM_CATEGORY_SPLIT : FORM_CATEGORY_SINGLE;
   const [rgValue, setRgValue] = React.useState(defaultMode);
 
   const handleRgChange = event => {
     setRgValue(event.target.value);
+  };
+
+  const handleFormCategoryInfoUpdate = newCategoryInfo => {
+    handleTransactionCategoryInfoUpdate(transactionId, newCategoryInfo);
   };
 
   return (
@@ -58,6 +70,8 @@ const TransactionItemCategoryModal = props => {
                     <SingleCategoryForm
                       transactionCategories={transactionCategories}
                       transactionCategoryInfo={transactionCategoryInfo}
+                      transactionValue={transactionValue}
+                      handleFormCategoryInfoUpdate={handleFormCategoryInfoUpdate}
                     />
                   )}
                   {rgValue === FORM_CATEGORY_SPLIT && transactionCategoryInfo && (
@@ -65,6 +79,7 @@ const TransactionItemCategoryModal = props => {
                       transactionCategories={transactionCategories}
                       transactionCategoryInfo={transactionCategoryInfo}
                       transactionValue={transactionValue}
+                      handleFormCategoryInfoUpdate={handleFormCategoryInfoUpdate}
                     />
                   )}
                 </div>
