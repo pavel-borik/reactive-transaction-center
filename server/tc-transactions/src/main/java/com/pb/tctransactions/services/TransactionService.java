@@ -2,6 +2,7 @@ package com.pb.tctransactions.services;
 
 import com.pb.tctransactions.dto.TransactionBalanceInfoDto;
 import com.pb.tctransactions.dto.TransactionCategoryInfoUpdateDto;
+import com.pb.tctransactions.model.aggregation.CategoryAggregationModel;
 import com.pb.tctransactions.model.enums.TransactionDirection;
 import com.pb.tctransactions.model.transactions.Transaction;
 import com.pb.tctransactions.repositories.TransactionRepository;
@@ -71,5 +72,15 @@ public class TransactionService {
 
     public Mono<Transaction> create(Transaction t) {
         return this.transactionRepository.save(t);
+    }
+
+    public Flux<CategoryAggregationModel> computeStatistics(String direction) {
+        TransactionDirection transactionDirection;
+        try {
+            transactionDirection = TransactionDirection.valueOf(direction);
+        } catch (IllegalArgumentException e) {
+            return Flux.empty();
+        }
+        return transactionRepository.groupByCategoryAndSum(transactionDirection);
     }
 }

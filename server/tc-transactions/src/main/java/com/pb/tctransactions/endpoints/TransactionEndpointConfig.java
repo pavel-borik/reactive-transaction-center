@@ -18,6 +18,7 @@ public class TransactionEndpointConfig {
                 .route(GET("/transactions"), transactionHandler::findAll)
                 .andRoute(GET("/transactions/{id}"), transactionHandler::findById)
                 .andRoute(PUT("/transactions/categoryInfo"), transactionHandler::updateCategoryInfo)
+                .andRoute(GET("/transactionsstatistics"), transactionHandler::computeStatistics)
                 .andRoute(GET("/transactionsinfo"), transactionHandler::resolveInfo)
                 .andRoute(POST("/transactions"), transactionHandler::create);
     }

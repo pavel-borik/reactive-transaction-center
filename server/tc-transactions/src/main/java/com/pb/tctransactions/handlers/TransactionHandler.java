@@ -15,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -92,5 +93,22 @@ public class TransactionHandler {
                         .contentType(MediaType.APPLICATION_JSON)
                         .build()
                 );
+    }
+
+    public Mono<ServerResponse> computeStatistics(ServerRequest r) {
+        Optional<String> direction = r.queryParam("direction");
+        if (direction.isEmpty()) {
+            return ServerResponse
+                    .badRequest()
+                    .build();
+        }
+        return transactionService.computeStatistics(direction.get()).collectList().flatMap(list ->
+                ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(Mono.just(list), List.class))
+                .switchIfEmpty(ServerResponse
+                        .badRequest()
+                        .build());
     }
 }
