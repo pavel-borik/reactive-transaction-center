@@ -10,7 +10,7 @@ import {
 import { CategoryModalFormProps, TransactionCategorySplitInfo } from './types';
 
 const CategorySplitForm: React.FunctionComponent<CategoryModalFormProps> = props => {
-  const { transactionCategoryInfo, transactionCategories } = props;
+  const { transactionCategoryInfo, transactionCategories, handleFormCategoryInfoUpdate } = props;
   const UNSELECTED = 'UNSELECTED';
   const [categorySplitInfo, changeCategorySplitInfo] = React.useState<TransactionCategorySplitInfo>({
     ...transactionCategoryInfo,
@@ -20,9 +20,6 @@ const CategorySplitForm: React.FunctionComponent<CategoryModalFormProps> = props
   const [categoryIdToSplit, handleCategoryInputChange] = React.useState<string>(UNSELECTED);
   const freeToAssign = categorySplitInfo[SpecialCategories.UNCATEGORIZED.id];
   const invalidForApply = !(parseFloat(splitAmount) > 0) || categoryIdToSplit === UNSELECTED;
-  const validForSubmit =
-    freeToAssign === 0 &&
-    Object.keys(categorySplitInfo).filter(key => key !== SpecialCategories.UNCATEGORIZED.id).length > 1;
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     switch (event.target.name) {
@@ -58,6 +55,12 @@ const CategorySplitForm: React.FunctionComponent<CategoryModalFormProps> = props
 
   const subtract = (a: string | number, b: string | number): number => {
     return Number.parseFloat((parseFloat(a.toString()) - parseFloat(b.toString())).toFixed(2));
+  };
+
+  const isInfoChanged = (): boolean => {
+    return !Object.entries(transactionCategoryInfo).every(([categoryId, amount]) => {
+      return categorySplitInfo[categoryId] === amount;
+    });
   };
 
   const handleTransactionSplit = (): void => {
@@ -99,6 +102,26 @@ const CategorySplitForm: React.FunctionComponent<CategoryModalFormProps> = props
     }, {});
     changeCategorySplitInfo(result);
   };
+
+  const updateCategoryInfo = (): void => {
+    const newInfo = Object.entries(categorySplitInfo).reduce(
+      (newCategoryInfo: TransactionCategorySplitInfo, [categoryId, amount]) => {
+        if (amount > 0 && categoryId !== SpecialCategories.UNCATEGORIZED.id) {
+          newCategoryInfo[categoryId] = amount;
+        }
+
+        return newCategoryInfo;
+      },
+      {}
+    );
+
+    handleFormCategoryInfoUpdate(newInfo);
+  };
+
+  const isValidForSubmit: boolean =
+    isInfoChanged() &&
+    freeToAssign === 0 &&
+    Object.keys(categorySplitInfo).filter(key => key !== SpecialCategories.UNCATEGORIZED.id).length > 1;
 
   return (
     <div>
@@ -209,12 +232,12 @@ const CategorySplitForm: React.FunctionComponent<CategoryModalFormProps> = props
             <span>
               <Button
                 name="submitNewSplit"
-                color={validForSubmit ? 'primary' : 'secondary'}
+                color={isValidForSubmit ? 'primary' : 'secondary'}
                 className="mt-2"
-                style={!validForSubmit ? { pointerEvents: 'none', width: 80 } : { width: 80 }}
+                style={!isValidForSubmit ? { pointerEvents: 'none', width: 80 } : { width: 80 }}
                 size="sm"
-                //onClick={e => handleTransactionSplit(e)}
-                disabled={!validForSubmit}
+                onClick={() => updateCategoryInfo()}
+                disabled={!isValidForSubmit}
               >
                 Save
               </Button>

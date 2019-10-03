@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
+import { Grid } from '@material-ui/core';
 import CustomPieChart from './CustomPieChart';
 import StatisticsFilterArea from '../filters/StatisticsFilterArea';
-import { Grid } from '@material-ui/core';
 import { TransactionDirections } from '../../../constants/transactions';
 
 const CategoryOverviewArea = props => {
   const { incomeChartData, expensesChartData, incomeSum, expensesSum, isLoading, filters, handleFilterChange } = props;
   return (
-    <Fragment>
+    <>
       <Grid container direction="column" alignItems="center" justify="center">
         <h3>Category overview</h3>
         <Grid item xs={12} style={{ minWidth: 200 }}>
@@ -19,7 +19,7 @@ const CategoryOverviewArea = props => {
           {incomeChartData.length > 0 ? (
             <div className="text-center">
               <h4>
-                Incomes total:{' '}
+                Incomes total:
                 {incomeSum.toLocaleString('cs-cz', {
                   style: 'currency',
                   currency: 'CZK'
@@ -60,7 +60,7 @@ const CategoryOverviewArea = props => {
           )}
         </Grid>
       </Grid>
-    </Fragment>
+    </>
   );
 };
 
