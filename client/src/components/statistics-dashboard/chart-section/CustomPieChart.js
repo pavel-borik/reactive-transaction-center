@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Cell, Legend, ResponsiveContainer, Tooltip } from 'recharts';
-import { COLORS_INCOME, COLORS_EXPENSES } from '../../../constants/colors';
 import { isEqual } from 'lodash';
+import { COLORS_INCOME, COLORS_EXPENSES } from '../../../constants/colors';
 import { TransactionDirections } from '../../../constants/transactions';
+import { TransactionCategoriesLookup } from '../../../constants/categories';
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
@@ -26,17 +27,17 @@ class CustomPieChart extends Component {
   render() {
     const { chartData, direction, sum } = this.props;
     const activeColorPalette = direction === TransactionDirections.INCOMING.id ? COLORS_INCOME : COLORS_EXPENSES;
-    const chartDataWithPct = chartData.map(data => Object.assign({}, data, { pct: data.value / sum }));
+    const chartDataWithPct = chartData.map(data => ({ ...data, pct: data.total / sum }));
     return (
       <div style={{ width: '100%', height: 300 }}>
         <ResponsiveContainer>
           <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-            <Pie data={chartDataWithPct} labelLine={false} label={renderCustomizedLabel} dataKey="value">
+            <Pie data={chartDataWithPct} labelLine={false} label={renderCustomizedLabel} dataKey="total">
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={activeColorPalette[index % activeColorPalette.length]} />
               ))}
             </Pie>
-            <Legend verticalAlign="middle" align="left" height={300} layout="vertical" />
+            <Legend verticalAlign="middle" align="left" height={300} layout="vertical" formatter={legendFormatter} />
             <Tooltip formatter={tooltipFormatter} />
           </PieChart>
         </ResponsiveContainer>
@@ -47,10 +48,22 @@ class CustomPieChart extends Component {
 
 const tooltipFormatter = (value, name, props) => {
   const percent = props.payload.pct;
-  return `${value.toLocaleString('cs-cz', {
+  const categoryId = props.payload.id;
+  const category = TransactionCategoriesLookup.get(categoryId);
+  const categoryName = category ? category.text : '';
+
+  const fmtValue = `${value.toLocaleString('cs-cz', {
     style: 'currency',
     currency: 'CZK'
-  })} (${(percent * 100).toFixed(0)} %)`;
+  })} (${percent < 0.01 ? (percent * 100).toFixed(2) : (percent * 100).toFixed(0)} %)`;
+
+  return [fmtValue, categoryName];
+};
+
+const legendFormatter = (value, entry, index) => {
+  const categoryId = entry.payload.id;
+  const category = TransactionCategoriesLookup.get(categoryId);
+  return category ? category.text : '';
 };
 
 export default CustomPieChart;

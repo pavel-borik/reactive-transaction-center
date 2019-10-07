@@ -3,15 +3,12 @@ package com.pb.tctransactions.repositories;
 import com.pb.tctransactions.model.aggregation.CategoryAggregationModel;
 import com.pb.tctransactions.model.enums.TransactionDirection;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
-
-import java.math.BigDecimal;
 
 @AllArgsConstructor
 @Repository
@@ -31,14 +28,17 @@ public class AggregationTransactionRepositoryImpl implements AggregationTransact
         ProjectionOperation project = Aggregation.project().andExpression("{$objectToArray:\"$transactionCategoryInfo\"}").as("transactionCategoryInfo");
         UnwindOperation unwind = Aggregation.unwind("transactionCategoryInfo");
         GroupOperation groupBy = Aggregation.group("$transactionCategoryInfo.k").sum(ConvertOperators.valueOf("$transactionCategoryInfo.v").convertToDecimal()).as("total");
-        Aggregation aggregation = Aggregation.newAggregation(match, project, unwind, groupBy);
+        SortOperation sort = Aggregation.sort(Sort.Direction.DESC, "total");
+        Aggregation aggregation = Aggregation.newAggregation(match, project, unwind, groupBy, sort);
         return reactiveMongoTemplate.aggregate(aggregation, "transactions", CategoryAggregationModel.class);
     }
 
-    @Data
-    @NoArgsConstructor
-    private class Res {
-        String id;
-        BigDecimal total;
+    @Override
+    public Flux<CategoryAggregationModel> groupByDirectionTotalSum(TransactionDirection transactionDirection) {
+        MatchOperation match = Aggregation.match(Criteria.where("direction").is(transactionDirection.getDirection()));
+        GroupOperation groupBy = Aggregation.group("$direction").sum(ConvertOperators.valueOf("$value.amount").convertToDecimal()).as("total");
+        Aggregation aggregation = Aggregation.newAggregation(match, groupBy);
+        return reactiveMongoTemplate.aggregate(aggregation, "transactions", CategoryAggregationModel.class);
     }
+
 }

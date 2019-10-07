@@ -2,6 +2,7 @@ package com.pb.tctransactions.handlers;
 
 import com.pb.tctransactions.dto.TransactionBalanceInfoDto;
 import com.pb.tctransactions.dto.TransactionCategoryInfoUpdateDto;
+import com.pb.tctransactions.dto.TransactionStatisticsResponseDto;
 import com.pb.tctransactions.model.transactions.Transaction;
 import com.pb.tctransactions.services.TransactionService;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -102,11 +102,13 @@ public class TransactionHandler {
                     .badRequest()
                     .build();
         }
-        return transactionService.computeStatistics(direction.get()).collectList().flatMap(list ->
-                ServerResponse
-                        .ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(Mono.just(list), List.class))
+
+        Mono<TransactionStatisticsResponseDto> response = transactionService.computeStatistics(direction.get());
+
+        return Mono.from(response).flatMap(res -> ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(res), TransactionStatisticsResponseDto.class))
                 .switchIfEmpty(ServerResponse
                         .badRequest()
                         .build());

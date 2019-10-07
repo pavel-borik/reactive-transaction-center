@@ -6,4 +6,5 @@ import reactor.core.publisher.Flux;
 
 public interface AggregationTransactionRepository {
     Flux<CategoryAggregationModel> groupByCategoryAndSum(TransactionDirection transactionDirection);
+    Flux<CategoryAggregationModel> groupByDirectionTotalSum(TransactionDirection transactionDirection);
 }

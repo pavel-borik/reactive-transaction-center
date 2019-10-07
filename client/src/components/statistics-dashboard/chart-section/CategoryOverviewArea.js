@@ -5,7 +5,17 @@ import StatisticsFilterArea from '../filters/StatisticsFilterArea';
 import { TransactionDirections } from '../../../constants/transactions';
 
 const CategoryOverviewArea = props => {
-  const { incomeChartData, expensesChartData, incomeSum, expensesSum, isLoading, filters, handleFilterChange } = props;
+  const {
+    incomeChartData,
+    expensesChartData,
+    incomeSum,
+    expensesSum,
+    isLoading,
+    filters,
+    handleFilterChange,
+    categoryInfoIncoming,
+    categoryInfoOutgoing
+  } = props;
   return (
     <>
       <Grid container direction="column" alignItems="center" justify="center">
@@ -19,14 +29,14 @@ const CategoryOverviewArea = props => {
           {incomeChartData.length > 0 ? (
             <div className="text-center">
               <h4>
-                Incomes total:
+                Incomes total:&nbsp;
                 {incomeSum.toLocaleString('cs-cz', {
                   style: 'currency',
                   currency: 'CZK'
                 })}
               </h4>
               <CustomPieChart
-                chartData={incomeChartData}
+                chartData={categoryInfoIncoming}
                 direction={TransactionDirections.INCOMING.id}
                 sum={incomeSum}
               />
@@ -41,14 +51,14 @@ const CategoryOverviewArea = props => {
           {expensesChartData.length > 0 ? (
             <div className="text-center">
               <h4>
-                Expenses total:{' '}
+                Expenses total:&nbsp;
                 {expensesSum.toLocaleString('cs-cz', {
                   style: 'currency',
                   currency: 'CZK'
                 })}
               </h4>
               <CustomPieChart
-                chartData={expensesChartData}
+                chartData={categoryInfoOutgoing}
                 direction={TransactionDirections.OUTGOING.id}
                 sum={expensesSum}
               />

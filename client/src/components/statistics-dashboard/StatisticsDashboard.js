@@ -24,10 +24,10 @@ const StatisticsDashboard = props => {
 
         <Grid container direction="row" justify="space-evenly" className="mt-5">
           <Grid item lg={6} xs={12} className="p-2">
-            <TableContainer direction={TransactionDirections.INCOMING.id} />
+            {/* <TableContainer direction={TransactionDirections.INCOMING.id} /> */}
           </Grid>
           <Grid item lg={6} xs={12} className="p-2">
-            <TableContainer direction={TransactionDirections.OUTGOING.id} />
+            {/* <TableContainer direction={TransactionDirections.OUTGOING.id} /> */}
           </Grid>
         </Grid>
         <Grid container direction="column" alignItems="center" />

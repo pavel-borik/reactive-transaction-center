@@ -16,7 +16,7 @@ export const RULES_DELETE = 'RULES_DELETE';
 
 // Statistics
 export const GET_CHART_DATA = 'GET_CHART_DATA';
-export const CHART_DATA_LOADING = 'CHART_DATA_LOADING';
+export const GET_CATEGORYINFO_DATA = 'GET_CATEGORYINFO_DATA';
 export const SET_STATISTICS_FILTER = 'SET_STATISTICS_FILTER';
 
 // Bank accounts
