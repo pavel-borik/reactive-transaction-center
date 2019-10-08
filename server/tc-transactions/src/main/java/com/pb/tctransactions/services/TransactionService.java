@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +76,7 @@ public class TransactionService {
         return this.transactionRepository.save(t);
     }
 
-    public Mono<TransactionStatisticsResponseDto> computeStatistics(String direction) {
+    public Mono<TransactionStatisticsResponseDto> computeStatistics(String direction, String timePeriod) {
         TransactionDirection transactionDirection;
         try {
             transactionDirection = TransactionDirection.valueOf(direction);
@@ -83,12 +84,16 @@ public class TransactionService {
             return Mono.empty();
         }
         Mono<List<CategoryAggregationModel>> aggregationList = transactionRepository
-                .groupByCategoryAndSum(transactionDirection)
-                .collectList();
+                .groupByCategoryAndSum(transactionDirection, timePeriod)
+                .collectList()
+                .switchIfEmpty(Mono.just(Collections.emptyList()));
 
-        Mono<CategoryAggregationModel> total = transactionRepository
-                .groupByDirectionTotalSum(transactionDirection).next();
+        Mono<BigDecimal> total = transactionRepository
+                .groupByDirectionTotalSum(transactionDirection, timePeriod)
+                .next()
+                .flatMap(aggregation -> Mono.just(aggregation.getTotal()))
+                .switchIfEmpty(Mono.just(BigDecimal.ZERO));
 
-        return aggregationList.flatMap(aggregation -> total.flatMap(tot -> Mono.just(new TransactionStatisticsResponseDto(tot.getTotal(), aggregation))));
+        return aggregationList.flatMap(aggregation -> total.flatMap(tot -> Mono.just(new TransactionStatisticsResponseDto(tot, aggregation))));
     }
 }

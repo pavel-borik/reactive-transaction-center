@@ -103,7 +103,14 @@ public class TransactionHandler {
                     .build();
         }
 
-        Mono<TransactionStatisticsResponseDto> response = transactionService.computeStatistics(direction.get());
+        Optional<String> timePeriod = r.queryParam("timePeriod");
+        if (timePeriod.isEmpty()) {
+            return ServerResponse
+                    .badRequest()
+                    .build();
+        }
+
+        Mono<TransactionStatisticsResponseDto> response = transactionService.computeStatistics(direction.get(), timePeriod.get());
 
         return Mono.from(response).flatMap(res -> ServerResponse
                 .ok()
