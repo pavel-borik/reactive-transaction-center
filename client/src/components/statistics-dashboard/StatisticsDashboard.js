@@ -1,21 +1,19 @@
-import React, { Fragment } from 'react';
-import TableContainer from '../../containers/statistics/TableContainer';
+import React from 'react';
 import { Grid, withStyles } from '@material-ui/core';
-import { TransactionDirections } from '../../constants/transactions';
 import CustomBarChart from './chart-section/CustomBarChart';
 import CategoryOverviewAreaContainer from '../../containers/statistics/CategoryOverviewAreaContainer';
 
 const StatisticsDashboard = props => {
   return (
-    <Fragment>
+    <>
       <h1>Statistics</h1>
       <Grid container direction="column">
         <Grid container item xs={12} style={{ minWidth: 200 }} justify="center">
           {props.barChartData.length > 0 && !props.isLoading ? (
-            <Fragment>
+            <>
               <h3>Incomes / Expenses last 12 months</h3>
               <CustomBarChart barChartData={props.barChartData} />
-            </Fragment>
+            </>
           ) : null}
         </Grid>
         <Grid item xs={12} className="mt-4">
@@ -32,7 +30,7 @@ const StatisticsDashboard = props => {
         </Grid>
         <Grid container direction="column" alignItems="center" />
       </Grid>
-    </Fragment>
+    </>
   );
 };
 

@@ -6,8 +6,6 @@ import { TransactionDirections } from '../../../constants/transactions';
 
 const CategoryOverviewArea = props => {
   const {
-    incomeChartData,
-    expensesChartData,
     incomeSum,
     expensesSum,
     isLoading,
@@ -26,7 +24,7 @@ const CategoryOverviewArea = props => {
       </Grid>
       <Grid container direction="row" justify="space-between" className="mt-4">
         <Grid item lg={6} xs={12} className={isLoading ? 'text-center' : ''}>
-          {incomeChartData.length > 0 ? (
+          {categoryInfoIncoming.length > 0 ? (
             <div className="text-center">
               <h4>
                 Incomes total:&nbsp;
@@ -48,7 +46,7 @@ const CategoryOverviewArea = props => {
           )}
         </Grid>
         <Grid item lg={6} xs={12} className={isLoading ? 'text-center' : ''}>
-          {expensesChartData.length > 0 ? (
+          {categoryInfoOutgoing.length > 0 ? (
             <div className="text-center">
               <h4>
                 Expenses total:&nbsp;

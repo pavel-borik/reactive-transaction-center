@@ -26,7 +26,7 @@ public class BankAccountService implements ApplicationListener<WebServerInitiali
     public Flux<BankAccount> findAll() {
 
         return bankAccountRepository.findAll().flatMap(bankAccount -> {
-            Mono<TransactionBalanceInfoDto> balanceInfo = client.get().uri(uriBuilder -> uriBuilder.path("/transactionsinfo")
+            Mono<TransactionBalanceInfoDto> balanceInfo = client.get().uri(uriBuilder -> uriBuilder.path("/transactions/info")
                     .queryParam("accountId", bankAccount.getId())
                     .build())
                     .accept(MediaType.APPLICATION_JSON)

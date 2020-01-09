@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
 public class TransactionEndpointConfig {
@@ -15,11 +16,12 @@ public class TransactionEndpointConfig {
     @Bean
     RouterFunction<ServerResponse> transactionRoutes(TransactionHandler transactionHandler) {
         return RouterFunctions
-                .route(GET("/transactions"), transactionHandler::findAll)
-                .andRoute(GET("/transactions/{id}"), transactionHandler::findById)
-                .andRoute(PUT("/transactions/categoryInfo"), transactionHandler::updateCategoryInfo)
-                .andRoute(GET("/transactionsstatistics"), transactionHandler::computeStatistics)
-                .andRoute(GET("/transactionsinfo"), transactionHandler::resolveInfo)
-                .andRoute(POST("/transactions"), transactionHandler::create);
+                .nest(path("/transactions"),
+                        route(PUT("/categoryInfo"), transactionHandler::updateCategoryInfo)
+                                .andRoute(GET("/statistics"), transactionHandler::computeStatistics)
+                                .andRoute(GET("/info"), transactionHandler::resolveInfo)
+                                .andRoute(GET("/{id}"), transactionHandler::findById)
+                                .andRoute(GET("/"), transactionHandler::findAll)
+                                .andRoute(POST("/"), transactionHandler::create));
     }
 }

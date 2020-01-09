@@ -25,8 +25,7 @@ public class TransactionHandler {
     private final TransactionService transactionService;
 
     public Mono<ServerResponse> findById(ServerRequest r) {
-        //return defaultReadResponse(this.transactionService.findById(r.pathVariable("id")));
-        return null;
+        return defaultReadResponse(this.transactionService.findById(r.pathVariable("id")));
     }
 
     public Mono<ServerResponse> findAll(ServerRequest r) {
@@ -75,7 +74,8 @@ public class TransactionHandler {
 
         return ServerResponse
                 .badRequest()
-                .build();
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue("error: accountId parameter not found");
     }
 
     private Mono<ServerResponse> defaultReadResponse(Publisher<Transaction> transactions) {

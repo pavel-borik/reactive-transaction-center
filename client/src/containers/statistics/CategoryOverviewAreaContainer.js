@@ -13,6 +13,12 @@ class CategoryOverviewAreaContainer extends Component {
     this.props.getCategoryInfoData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.filters.FILTER_TIME_PERIOD !== this.props.filters.FILTER_TIME_PERIOD) {
+      this.props.getCategoryInfoData();
+    }
+  }
+
   render() {
     return !this.props.isLoading ? (
       <CategoryOverviewArea {...this.props} />
@@ -32,8 +38,8 @@ const makeMapStateToProps = () => {
   const computePieChart = computeTransactionSumsPerCategoryByDirection();
   const sum = sumTransactions();
   const mapStateToProps = state => ({
-    incomeChartData: computePieChart(state, TransactionDirections.INCOMING.id),
-    expensesChartData: computePieChart(state, TransactionDirections.OUTGOING.id),
+    //incomeChartData: computePieChart(state, TransactionDirections.INCOMING.id),
+    //expensesChartData: computePieChart(state, TransactionDirections.OUTGOING.id),
     incomeSum: state.statistics.totalIncoming,
     expensesSum: state.statistics.totalOutgoing,
     isLoading: state.transactions.loading,
